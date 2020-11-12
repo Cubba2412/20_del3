@@ -1,10 +1,11 @@
 package Classes;
 
+import java.util.Dictionary;
+
 public class Board {
 
     private int squareCount = 24;
     private Square[] squares = new Square[squareCount];
-
 
     public Board(){
         initializeBoard();

@@ -5,7 +5,7 @@ public class Player {
     private String name;
     private int age;
     private int balance;
-    private int currentPositionIndex;
+    private int currentSquareIndex;
 
     public Player(String name, int age, int balance) {
         this.name = name;
@@ -25,12 +25,12 @@ public class Player {
         return balance;
     }
 
-    public int getCurrentPositionIndex() {
-        return currentPositionIndex;
+    public int getCurrentSquareIndex() {
+        return currentSquareIndex;
     }
 
-    public void setCurrentPositionIndex(int currentPositionIndex) {
-        this.currentPositionIndex = currentPositionIndex;
+    public void setCurrentSquareIndex(int currentPositionIndex) {
+        this.currentSquareIndex = currentPositionIndex;
     }
 
     public void increaseBalanceBy(int amount){
