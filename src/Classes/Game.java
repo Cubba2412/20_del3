@@ -28,12 +28,36 @@ public class Game {
             String waitForEnter = scanner.next();
             int diceValue = dice.roll();
             System.out.println("Kast terning: " + diceValue);
-            board.takePlayerTurn(currentPlayer, diceValue);
+
+            try {
+                board.takePlayerTurn(currentPlayer, diceValue);
+            } catch (NotEnoughBalanceException e) {
+                handleGameOver(currentPlayer);
+                return;
+            }
 
             playerIndex++;
             playerIndex = playerIndex % playerCount;
             currentPlayer = players[playerIndex];
         }
+    }
+
+    private void handleGameOver(Player currentPlayer) {
+        Player winingPlayer = players[0];
+        for (int i = 0; i < playerCount; i++) {
+            Player player = players[i];
+            if(player == currentPlayer){
+                continue;
+            }
+            if(player.getBalance() > winingPlayer.getBalance()){
+                winingPlayer = player;
+            }
+        }
+
+        System.out.println(" ### SPIL SLUT ###");
+        System.out.println("Vinder");
+        System.out.println("Navn: " + winingPlayer.getName());
+        System.out.println("Pengebeholding: " + winingPlayer.getBalance());
     }
 
     private int getYoungestPlayerIndex() {
