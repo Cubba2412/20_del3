@@ -6,6 +6,7 @@ public class Board {
 
     private int squareCount = 24;
     private Square[] squares = new Square[squareCount];
+    private BoardSquare[] boardSquares = new BoardSquare[squareCount];
 
     public Board(){
         initializeBoard();
