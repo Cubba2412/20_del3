@@ -2,19 +2,19 @@ package Classes;
 
 public class Player {
 
-    private String navn;
+    private String name;
     private int age;
     private int balance;
     private int currentPositionIndex;
 
-    public Player(String navn, int age, int balance) {
-        this.navn = navn;
+    public Player(String name, int age, int balance) {
+        this.name = name;
         this.age = age;
         this.balance = balance;
     }
 
-    public String getNavn() {
-        return navn;
+    public String getName() {
+        return name;
     }
 
     public int getAge() {
