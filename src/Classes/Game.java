@@ -13,6 +13,28 @@ public class Game {
         initializeGame();
     }
 
+    private void startGame(){
+
+        Player current = getYoungestPlayer();
+        boolean running = true;
+        while(running){
+
+
+
+        }
+    }
+
+    private Player getYoungestPlayer(){
+        Player youngestPlayer = players[0];
+        for (int i = 0; i < players.length; i++) {
+            Player player = players[i];
+            if(player.getAge() < youngestPlayer.getAge()){
+                youngestPlayer = player;
+            }
+        }
+        return youngestPlayer;
+    }
+
     private void initializeGame(){
 
         Scanner scanner = new Scanner(System.in);
