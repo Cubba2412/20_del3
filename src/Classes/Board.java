@@ -19,6 +19,8 @@ public class Board {
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
         Square square = boardSquare.getSquare();
 
+        handleAnySquare(currentPlayer);
+
         switch(square.getSquareType()){
             case DoNothing:
                 handleNothingSquare(currentPlayer);
@@ -38,11 +40,15 @@ public class Board {
             case FreeParking:
                 handleFreeParkingSquare(currentPlayer);
                 break;
-            case Jail:
-                handleJailSquare(currentPlayer);
-                break;
         }
 
+    }
+
+    private void handleAnySquare(Player currentPlayer){
+        if(currentPlayer.isInPrison()){
+            currentPlayer.decreaseBalanceBy(1);
+            currentPlayer.setInPrison(false);
+        }
     }
 
     private void handleNothingSquare(Player currentPlayer){
@@ -69,8 +75,9 @@ public class Board {
     }
 
     private void handleGotoJailSquare(Player currentPlayer){
-        //user goes to take a break
-
+        currentPlayer.setInPrison(true);
+        int takeABreakBoardSquareIndex = getSquareIndexByType(SquareType.TakeBreak);
+        currentPlayer.setCurrentSquareIndex(takeABreakBoardSquareIndex);
     }
 
     private void handleTakeABreakSquare(Player currentPlayer){
@@ -85,13 +92,10 @@ public class Board {
 
     }
 
-    private void handleJailSquare(Player currentPlayer){
-
-    }
-
     private int getSquareIndexByType(SquareType squareType){
         for (int i = 0; i < squareCount; i++) {
-            if(boardSquares[i].getSquare().getSquareType() == squareType){
+            BoardSquare boardSquare = boardSquares[i];
+            if(boardSquare.getSquare().getSquareType() == squareType){
                 return i;
             }
         }
@@ -116,7 +120,7 @@ public class Board {
         Square  biografen = new Square("Biografen", 3, SquareColor.Red,SquareType.Payment);
         Square  legetøjsButikken = new Square("Legetøjsbutikken", 3, SquareColor.Yellow,SquareType.Payment);
         Square  dyreHandlen = new Square("Dyrehandlen", 3, SquareColor.Yellow,SquareType.Payment);
-        Square  gåIFængsel = new Square("Gå i fængsel", 0, SquareColor.None,SquareType.Jail);
+        Square  gåIFængsel = new Square("Gå i fængsel", 0, SquareColor.None,SquareType.GotoJail);
         Square  bowlingHalen = new Square("Bowlinghalen", 4, SquareColor.Green,SquareType.Payment);
         Square  zoo = new Square("Zoo", 4, SquareColor.Green,SquareType.Payment);
         Square  vandLandet = new Square("Vandlandet", 5, SquareColor.DarkBlue,SquareType.Payment);

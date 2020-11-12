@@ -7,6 +7,7 @@ public class Player {
     private int balance;
     private int currentSquareIndex;
     private PlayerFigureType figureType;
+    private boolean isInPrison;
 
     public Player(String name, int age, PlayerFigureType figureType, int balance) {
         this.name = name;
@@ -41,5 +42,13 @@ public class Player {
 
     public void decreaseBalanceBy(int amount){
         this.balance -= amount;
+    }
+
+    public boolean isInPrison() {
+        return isInPrison;
+    }
+
+    public void setInPrison(boolean inPrison) {
+        isInPrison = inPrison;
     }
 }

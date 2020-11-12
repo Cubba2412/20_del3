@@ -32,6 +32,8 @@ public class Game {
             int currentIndex = (currentPlayer.getCurrentSquareIndex() + diceValue) % board.getSquareCount();
             currentPlayer.setCurrentSquareIndex(currentIndex);
             board.takePlayerTurn(currentPlayer);
+
+
         }
     }
 
