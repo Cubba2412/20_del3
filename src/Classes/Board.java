@@ -9,6 +9,10 @@ public class Board {
         initializeBoard();
     }
 
+    public BoardSquare getBoardSquareByIndex(int index){
+        return boardSquares[index];
+    }
+
     public void takePlayerTurn(Player currentPlayer, int diceValue) throws NotEnoughBalanceException {
 
         int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
@@ -110,9 +114,9 @@ public class Board {
     private void initializeBoard() {
 
         Square start = new Square("Start", 0, SquareColor.None, SquareType.DoNothing);
-        Square burgerBaren = new Square("Burgerbaren", 2, SquareColor.Brown, SquareType.Payment);
+        Square burgerBaren = new Square("Burgerbaren", 1, SquareColor.Brown, SquareType.Payment);
         Square pizzaria = new Square("Pizzaria", 1, SquareColor.Brown, SquareType.Payment);
-        Square chance = new Square("Chace", 0, SquareColor.None, SquareType.TakeChanceCard);
+        Square chance = new Square("Chance", 0, SquareColor.None, SquareType.TakeChanceCard);
         Square slikButikken = new Square("Slikbutikken", 1, SquareColor.LightBlue, SquareType.Payment);
         Square isKiosken = new Square("Iskiosken", 1, SquareColor.LightBlue, SquareType.Payment);
         Square påBesoeg = new Square("På besøg", 0, SquareColor.None, SquareType.DoNothing);

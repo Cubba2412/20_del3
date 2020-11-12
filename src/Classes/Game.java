@@ -23,14 +23,20 @@ public class Game {
         boolean running = true;
         while (running) {
             String name = currentPlayer.getName();
+            System.out.println();
             System.out.println("### " + name + " ###");
             System.out.println("Kast terning - tryk på Enter");
-            String waitForEnter = scanner.next();
+            String waitForEnter = scanner.nextLine();
             int diceValue = dice.roll();
-            System.out.println("Kast terning: " + diceValue);
+            System.out.println("Terning: " + diceValue);
 
             try {
                 board.takePlayerTurn(currentPlayer, diceValue);
+                BoardSquare boardSquare = board.getBoardSquareByIndex(currentPlayer.getCurrentSquareIndex());
+                Square square = boardSquare.getSquare();
+                System.out.println("Pris: " + square.getPrice());
+                System.out.println("Pengebeholdning: " + currentPlayer.getBalance());
+                System.out.println("Square: " + square.getName());
             } catch (NotEnoughBalanceException e) {
                 handleGameOver(currentPlayer);
                 return;
@@ -78,7 +84,7 @@ public class Game {
         System.out.println("Velkommen til Matador");
 
         System.out.println("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
-        playerCount = scanner.nextInt();
+        playerCount = nextIntFromScanner();
         if (playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
             System.out.println("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
             System.exit(1);
@@ -91,13 +97,17 @@ public class Game {
         for (int i = 0; i < playerCount; i++) {
             int playerNumber = i + 1;
             System.out.println("Spiller " + playerNumber + " navn: ");
-            String name = scanner.next();
+            String name = scanner.nextLine();
             System.out.println("Spiller " + playerNumber + " alder: ");
-            int age = scanner.nextInt();
+            int age = nextIntFromScanner();
             players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
         }
+    }
 
-
+    private int nextIntFromScanner(){
+        int value = scanner.nextInt();
+        String readLineButItsNotUsed = scanner.nextLine();
+        return value;
     }
 
     private PlayerFigureType[] getPlayerFigureTypes() {
