@@ -8,7 +8,8 @@ public enum SquareColor {
     Pink,
     Yellow,
     Red,
-    LightYellow,
+    Orange,
     Green,
-    DarkBlue
+    DarkBlue,
+
 }

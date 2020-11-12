@@ -73,10 +73,10 @@ public class Game {
 
     private PlayerFigureType[] getPlayerFigureTypes() {
         PlayerFigureType[] availableFigureTypes = new PlayerFigureType[4];
-        availableFigureTypes[0] = PlayerFigureType.Car;
-        availableFigureTypes[1] = PlayerFigureType.Cat;
-        availableFigureTypes[2] = PlayerFigureType.Dog;
-        availableFigureTypes[3] = PlayerFigureType.Ship;
+        availableFigureTypes[0] = PlayerFigureType.Bilen;
+        availableFigureTypes[1] = PlayerFigureType.Katten;
+        availableFigureTypes[2] = PlayerFigureType.Hunden;
+        availableFigureTypes[3] = PlayerFigureType.Skibet;
 
         PlayerFigureType[] figureTypes = new PlayerFigureType[playerCount];
         for (int i = 0; i < playerCount; i++) {

@@ -107,10 +107,10 @@ public class Board {
         Square  slikButikken = new Square("Slikbutikken", 1, SquareColor.LightBlue,SquareType.Payment);
         Square  isKiosken = new Square("Iskiosken", 1, SquareColor.LightBlue,SquareType.Payment);
         Square  påBesoeg = new Square("På besøg", 0, SquareColor.None,SquareType.DoNothing);
-        Square  museet = new Square("Musset", 2, SquareColor.Pink);
+        Square  museet = new Square("Musset", 2, SquareColor.Pink,SquareType.Payment);
         Square  biblioteket= new Square("Biblioteket", 2, SquareColor.Pink,SquareType.Payment);
-        Square  skaterParken = new Square("Skatenparken", 2, SquareColor.LightYellow,SquareType.Payment);
-        Square  svømminPoolen = new Square("Svømmingpoolen", 2, SquareColor.LightYellow,SquareType.Payment);
+        Square  skaterParken = new Square("Skatenparken", 2, SquareColor.Orange,SquareType.Payment);
+        Square  svømminPoolen = new Square("Svømmingpoolen", 2, SquareColor.Orange,SquareType.Payment);
         Square  gratisParkering = new Square("Gratis parkering", 0, SquareColor.None,SquareType.DoNothing);
         Square  spilleHalen = new Square("Spillehalen", 3, SquareColor.Red,SquareType.Payment);
         Square  biografen = new Square("Biografen", 3, SquareColor.Red,SquareType.Payment);
