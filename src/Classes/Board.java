@@ -3,7 +3,6 @@ package Classes;
 public class Board {
 
     private int squareCount = 24;
-    private Square[] squares = new Square[squareCount];
     private BoardSquare[] boardSquares = new BoardSquare[squareCount];
 
     public Board() {
@@ -132,6 +131,31 @@ public class Board {
         Square vandLandet = new Square("Vandlandet", 5, SquareColor.DarkBlue, SquareType.Payment);
         Square strandPromenaden = new Square("Strandpromenaden", 5, SquareColor.DarkBlue, SquareType.Payment);
 
+        int index = 0;
+        boardSquares[index++] = new BoardSquare(start);
+        boardSquares[index++] = new BoardSquare(burgerBaren);
+        boardSquares[index++] = new BoardSquare(pizzaria);
+        boardSquares[index++] = new BoardSquare(chance);
+        boardSquares[index++] = new BoardSquare(slikButikken);
+        boardSquares[index++] = new BoardSquare(isKiosken);
+        boardSquares[index++] = new BoardSquare(påBesoeg);
+        boardSquares[index++] = new BoardSquare(museet);
+        boardSquares[index++] = new BoardSquare(biblioteket);
+        boardSquares[index++] = new BoardSquare(chance);
+        boardSquares[index++] = new BoardSquare(skaterParken);
+        boardSquares[index++] = new BoardSquare(svømminPoolen);
+        boardSquares[index++] = new BoardSquare(gratisParkering);
+        boardSquares[index++] = new BoardSquare(spilleHalen);
+        boardSquares[index++] = new BoardSquare(biografen);
+        boardSquares[index++] = new BoardSquare(chance);
+        boardSquares[index++] = new BoardSquare(legetøjsButikken);
+        boardSquares[index++] = new BoardSquare(dyreHandlen);
+        boardSquares[index++] = new BoardSquare(gåIFængsel);
+        boardSquares[index++] = new BoardSquare(bowlingHalen);
+        boardSquares[index++] = new BoardSquare(zoo);
+        boardSquares[index++] = new BoardSquare(chance);
+        boardSquares[index++] = new BoardSquare(vandLandet);
+        boardSquares[index++] = new BoardSquare(strandPromenaden);
     }
 
 }
