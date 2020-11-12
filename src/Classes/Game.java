@@ -1,6 +1,5 @@
 package Classes;
 
-import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -17,12 +16,12 @@ public class Game {
         initializeGame();
     }
 
-    private void startGame() {
+    public void start() {
 
-        Player currentPlayer = getYoungestPlayer();
+        int playerIndex = getYoungestPlayerIndex();
+        Player currentPlayer = players[playerIndex];
         boolean running = true;
         while (running) {
-
             String name = currentPlayer.getName();
             System.out.println("### " + name + " ###");
             System.out.println("Kast terning - tryk på Enter");
@@ -31,19 +30,23 @@ public class Game {
             System.out.println("Kast terning: " + diceValue);
             board.takePlayerTurn(currentPlayer, diceValue);
 
-
+            playerIndex++;
+            playerIndex = playerIndex % playerCount;
+            currentPlayer = players[playerIndex];
         }
     }
 
-    private Player getYoungestPlayer() {
-        Player youngestPlayer = players[0];
+    private int getYoungestPlayerIndex() {
+        int index = 0;
+        Player youngestPlayer = players[index];
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
             if (player.getAge() < youngestPlayer.getAge()) {
+                index = i;
                 youngestPlayer = player;
             }
         }
-        return youngestPlayer;
+        return index;
     }
 
     private void initializeGame() {
@@ -69,6 +72,8 @@ public class Game {
             int age = scanner.nextInt();
             players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
         }
+
+
     }
 
     private PlayerFigureType[] getPlayerFigureTypes() {
