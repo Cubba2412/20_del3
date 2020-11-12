@@ -10,16 +10,16 @@ public class Board {
         initializeBoard();
     }
 
-    public int getSquareCount() {
-        return squareCount;
-    }
+    public void takePlayerTurn(Player currentPlayer, int diceValue){
 
-    public void takePlayerTurn(Player currentPlayer){
+        int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
+        int currentIndex = nextIndex % squareCount;
+        currentPlayer.setCurrentSquareIndex(currentIndex);
 
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
         Square square = boardSquare.getSquare();
 
-        handleAnySquare(currentPlayer);
+        handleAnySquareBefore(currentPlayer);
 
         switch(square.getSquareType()){
             case DoNothing:
@@ -42,12 +42,20 @@ public class Board {
                 break;
         }
 
+        handleAnySquareAfter(currentPlayer, nextIndex);
+
     }
 
-    private void handleAnySquare(Player currentPlayer){
+    private void handleAnySquareBefore(Player currentPlayer){
         if(currentPlayer.isInPrison()){
             currentPlayer.decreaseBalanceBy(1);
             currentPlayer.setInPrison(false);
+        }
+    }
+
+    private void handleAnySquareAfter(Player currentPlayer, int nextIndex){
+        if(nextIndex >= squareCount && !currentPlayer.isInPrison()){
+            currentPlayer.increaseBalanceBy(2);
         }
     }
 
