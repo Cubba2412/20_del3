@@ -1,5 +1,6 @@
 package Classes;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -28,7 +29,7 @@ public class Game {
             String waitForEnter = scanner.next();
             int diceValue = dice.roll();
             System.out.println("Kast terning: " + diceValue);
-            int currentIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
+            int currentIndex = (currentPlayer.getCurrentSquareIndex() + diceValue) % board.getSquareCount();
             currentPlayer.setCurrentSquareIndex(currentIndex);
             board.takePlayerTurn(currentPlayer);
         }
@@ -59,14 +60,29 @@ public class Game {
 
         players = new Player[playerCount];
         int initialPlayerBalance = getPlayerInitialBalance();
+        PlayerFigureType[] figureTypes = getPlayerFigureTypes();
         for (int i = 0; i < playerCount; i++) {
             int playerNumber = i + 1;
             System.out.println("Spiller " + playerNumber + " navn: ");
             String name = scanner.next();
             System.out.println("Spiller " + playerNumber + " alder: ");
             int age = scanner.nextInt();
-            players[i] = new Player(name, age, initialPlayerBalance);
+            players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
         }
+    }
+
+    private PlayerFigureType[] getPlayerFigureTypes() {
+        PlayerFigureType[] availableFigureTypes = new PlayerFigureType[4];
+        availableFigureTypes[0] = PlayerFigureType.Car;
+        availableFigureTypes[1] = PlayerFigureType.Cat;
+        availableFigureTypes[2] = PlayerFigureType.Dog;
+        availableFigureTypes[3] = PlayerFigureType.Ship;
+
+        PlayerFigureType[] figureTypes = new PlayerFigureType[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            figureTypes[i] = availableFigureTypes[i];
+        }
+        return figureTypes;
     }
 
     private int getPlayerInitialBalance() {

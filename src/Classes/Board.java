@@ -10,7 +10,46 @@ public class Board {
         initializeBoard();
     }
 
+    public int getSquareCount() {
+        return squareCount;
+    }
+
     public void takePlayerTurn(Player currentPlayer){
+
+        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+        Square square = boardSquare.getSquare();
+
+        switch(square.getSquareType()){
+            case DoNothing:
+                handleNothingSquare(currentPlayer);
+                break;
+            case Payment:
+                handlePaymentSquare(currentPlayer);
+                break;
+            case GotoJail:
+                handleGotoJailSquare(currentPlayer);
+                break;
+            case TakeBreak:
+                handleTakeABreakSquare(currentPlayer);
+                break;
+            case TakeChanceCard:
+                handleTakeChanceCardSquare(currentPlayer);
+                break;
+            case FreeParking:
+                handleFreeParkingSquare(currentPlayer);
+                break;
+            case Jail:
+                handleJailSquare(currentPlayer);
+                break;
+        }
+
+    }
+
+    private void handleNothingSquare(Player currentPlayer){
+
+    }
+
+    private void handlePaymentSquare(Player currentPlayer){
 
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
         Square square = boardSquare.getSquare();
@@ -27,32 +66,61 @@ public class Board {
             currentPlayer.decreaseBalanceBy(price);
             boardSquare.addRentedToPlayer(currentPlayer);
         }
+    }
 
+    private void handleGotoJailSquare(Player currentPlayer){
+        //user goes to take a break
+
+    }
+
+    private void handleTakeABreakSquare(Player currentPlayer){
+
+    }
+
+    private void handleTakeChanceCardSquare(Player currentPlayer){
+
+    }
+
+    private void handleFreeParkingSquare(Player currentPlayer){
+
+    }
+
+    private void handleJailSquare(Player currentPlayer){
+
+    }
+
+    private int getSquareIndexByType(SquareType squareType){
+        for (int i = 0; i < squareCount; i++) {
+            if(boardSquares[i].getSquare().getSquareType() == squareType){
+                return i;
+            }
+        }
+        return 0;
     }
 
     private void initializeBoard(){
 
-        Square  start = new Square("Start", 0, SquareColor.None);
-        Square  burgerBaren = new Square("Burgerbaren", 2, SquareColor.Brown);
-        Square  pizzaria = new Square("Pizzaria", 1, SquareColor.Brown);
-        Square  chance = new Square("Chace", 0, SquareColor.None);
-        Square  slikButikken = new Square("Slikbutikken", 1, SquareColor.LightBlue);
-        Square  isKiosken = new Square("Iskiosken", 1, SquareColor.LightBlue);
-        Square  påBesoeg = new Square("På besøg", 0, SquareColor.None);
+        Square  start = new Square("Start", 0, SquareColor.None, SquareType.DoNothing);
+        Square  burgerBaren = new Square("Burgerbaren", 2, SquareColor.Brown,SquareType.Payment);
+        Square  pizzaria = new Square("Pizzaria", 1, SquareColor.Brown,SquareType.Payment);
+        Square  chance = new Square("Chace", 0, SquareColor.None,SquareType.TakeChanceCard);
+        Square  slikButikken = new Square("Slikbutikken", 1, SquareColor.LightBlue,SquareType.Payment);
+        Square  isKiosken = new Square("Iskiosken", 1, SquareColor.LightBlue,SquareType.Payment);
+        Square  påBesoeg = new Square("På besøg", 0, SquareColor.None,SquareType.DoNothing);
         Square  museet = new Square("Musset", 2, SquareColor.Pink);
-        Square  biblioteket= new Square("Biblioteket", 2, SquareColor.Pink);
-        Square  skaterParken = new Square("Skatenparken", 2, SquareColor.LightYellow);
-        Square  svømminPoolen = new Square("Svømmingpoolen", 2, SquareColor.LightYellow);
-        Square  gratisParkering = new Square("Gratis parkering", 0, SquareColor.None);
-        Square  spilleHalen = new Square("Spillehalen", 3, SquareColor.Red);
-        Square  biografen = new Square("Biografen", 3, SquareColor.Red);
-        Square  legetøjsButikken = new Square("Legetøjsbutikken", 3, SquareColor.Yellow);
-        Square  dyreHandlen = new Square("Dyrehandlen", 3, SquareColor.Yellow);
-        Square  gåIFængsel = new Square("Gå i fængsel", 0, SquareColor.None);
-        Square  bowlingHalen = new Square("Bowlinghalen", 4, SquareColor.Green);
-        Square  zoo = new Square("Zoo", 4, SquareColor.Green);
-        Square  vandLandet = new Square("Vandlandet", 5, SquareColor.DarkBlue);
-        Square  strandPromenaden = new Square("Strandpromenaden", 5, SquareColor.DarkBlue);
+        Square  biblioteket= new Square("Biblioteket", 2, SquareColor.Pink,SquareType.Payment);
+        Square  skaterParken = new Square("Skatenparken", 2, SquareColor.LightYellow,SquareType.Payment);
+        Square  svømminPoolen = new Square("Svømmingpoolen", 2, SquareColor.LightYellow,SquareType.Payment);
+        Square  gratisParkering = new Square("Gratis parkering", 0, SquareColor.None,SquareType.DoNothing);
+        Square  spilleHalen = new Square("Spillehalen", 3, SquareColor.Red,SquareType.Payment);
+        Square  biografen = new Square("Biografen", 3, SquareColor.Red,SquareType.Payment);
+        Square  legetøjsButikken = new Square("Legetøjsbutikken", 3, SquareColor.Yellow,SquareType.Payment);
+        Square  dyreHandlen = new Square("Dyrehandlen", 3, SquareColor.Yellow,SquareType.Payment);
+        Square  gåIFængsel = new Square("Gå i fængsel", 0, SquareColor.None,SquareType.Jail);
+        Square  bowlingHalen = new Square("Bowlinghalen", 4, SquareColor.Green,SquareType.Payment);
+        Square  zoo = new Square("Zoo", 4, SquareColor.Green,SquareType.Payment);
+        Square  vandLandet = new Square("Vandlandet", 5, SquareColor.DarkBlue,SquareType.Payment);
+        Square  strandPromenaden = new Square("Strandpromenaden", 5, SquareColor.DarkBlue,SquareType.Payment);
 
     }
 

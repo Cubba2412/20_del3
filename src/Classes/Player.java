@@ -6,11 +6,13 @@ public class Player {
     private int age;
     private int balance;
     private int currentSquareIndex;
+    private PlayerFigureType figureType;
 
-    public Player(String name, int age, int balance) {
+    public Player(String name, int age, PlayerFigureType figureType, int balance) {
         this.name = name;
         this.age = age;
         this.balance = balance;
+        this.figureType = figureType;
     }
 
     public String getName() {

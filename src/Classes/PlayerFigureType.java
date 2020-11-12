@@ -1,6 +1,6 @@
 package Classes;
 
-public enum SoldSign {
+public enum PlayerFigureType {
     Dog,
     Cat,
     Car,
