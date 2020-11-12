@@ -36,12 +36,17 @@ public class Player {
         this.currentSquareIndex = currentPositionIndex;
     }
 
-    public void increaseBalanceBy(int amount){
+    public void increaseBalanceBy(int amount) {
         this.balance += amount;
     }
 
-    public void decreaseBalanceBy(int amount){
-        this.balance -= amount;
+    public void decreaseBalanceBy(int amount) throws NotEnoughBalanceException {
+        int remainingBalance = this.balance - amount;
+        if (remainingBalance < 0) {
+            throw new NotEnoughBalanceException();
+        }
+
+        this.balance = remainingBalance;
     }
 
     public boolean isInPrison() {
