@@ -1,7 +1,5 @@
 package Classes;
 
-import java.util.Dictionary;
-
 public class Board {
 
     private int squareCount = 24;
@@ -10,6 +8,26 @@ public class Board {
 
     public Board(){
         initializeBoard();
+    }
+
+    public void takePlayerTurn(Player currentPlayer){
+
+        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+        Square square = boardSquare.getSquare();
+        int price = square.getPrice();
+        Player soldToPlayer = boardSquare.getSoldToPlayer();
+        if(soldToPlayer == null){
+            // the first player on this square becomes the owner and pays the price
+            currentPlayer.decreaseBalanceBy(price);
+            boardSquare.setSoldToPlayer(currentPlayer);
+        }
+        else{
+            // other players coming to this square pays to the owner and become one of the renters
+            soldToPlayer.increaseBalanceBy(price);
+            currentPlayer.decreaseBalanceBy(price);
+            boardSquare.addRentedToPlayer(currentPlayer);
+        }
+
     }
 
     private void initializeBoard(){

@@ -28,9 +28,9 @@ public class Game {
             String waitForEnter = scanner.next();
             int diceValue = dice.roll();
             System.out.println("Kast terning: " + diceValue);
-
             int currentIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
             currentPlayer.setCurrentSquareIndex(currentIndex);
+            board.takePlayerTurn(currentPlayer);
         }
     }
 
