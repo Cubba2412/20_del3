@@ -71,6 +71,15 @@ public class Board {
         Square square = boardSquare.getSquare();
         int price = square.getPrice();
         Player soldToPlayer = boardSquare.getSoldToPlayer();
+
+// if the soldToPlayer is the same as the currentPlayer then do not do anything because
+// the currentPlayer already owns this square
+        if (soldToPlayer == currentPlayer){
+            return;
+
+
+        }
+
         if (soldToPlayer == null) {
             // the first player on this square becomes the owner and pays the price
             currentPlayer.decreaseBalanceBy(price);
