@@ -1,6 +1,7 @@
 package Classes;
 
 import java.util.Scanner;
+import gui_main.GUI;
 
 public class Game {
 
@@ -80,8 +81,8 @@ public class Game {
     }
 
     private void initializeGame() {
-
-        System.out.println("Velkommen til Matador");
+        GUI gui = new GUI();
+        gui.showMessage("                                                                        Velkommen til Matador!");
 
         System.out.println("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         playerCount = nextIntFromScanner();
