@@ -97,7 +97,7 @@ public class Game {
         //PlayerFigureType[] figureTypes = getPlayerFigureTypes();
         GUI_Player[] players = new GUI_Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            String name = gui.getUserString("Indtast spiller " + i+1 + "'s navn: ");
+            String name = gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
             //int age = gui.getUserInteger("Indtast spiller " + i + "'s alder: ");
             players[i] = new GUI_Player(name, 2000);
             gui.addPlayer(players[i]);
