@@ -1,6 +1,8 @@
 package Classes;
 
 import java.util.Scanner;
+
+import gui_fields.GUI_Player;
 import gui_main.GUI;
 
 public class Game {
@@ -84,24 +86,23 @@ public class Game {
         GUI gui = new GUI();
         gui.showMessage("                                                                        Velkommen til Matador!");
 
-        System.out.println("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
-        playerCount = nextIntFromScanner();
-        if (playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
-            System.out.println("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
-            System.exit(1);
-            return;
+        playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+        //playerCount = nextIntFromScanner();
+        while(playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
+            gui.showMessage("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
+            playerCount = gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         }
 
-        players = new Player[playerCount];
-        int initialPlayerBalance = getPlayerInitialBalance();
-        PlayerFigureType[] figureTypes = getPlayerFigureTypes();
+        //int initialPlayerBalance = getPlayerInitialBalance();
+        //PlayerFigureType[] figureTypes = getPlayerFigureTypes();
+        GUI_Player[] players = new GUI_Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            int playerNumber = i + 1;
-            System.out.println("Spiller " + playerNumber + " navn: ");
-            String name = scanner.nextLine();
-            System.out.println("Spiller " + playerNumber + " alder: ");
-            int age = nextIntFromScanner();
-            players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
+            String name = gui.getUserString("Indtast spiller " + i+1 + "'s navn: ");
+            //int age = gui.getUserInteger("Indtast spiller " + i + "'s alder: ");
+            players[i] = new GUI_Player(name, 2000);
+            gui.addPlayer(players[i]);
+            gui.getFields()[0].setCar(players[i], true);
+            //players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
         }
     }
 
