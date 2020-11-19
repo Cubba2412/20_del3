@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class PlayerTest {
     private Player player;
-
+    //Do this before all the testing
     @Before
     public void init() {
         player = new Player("Test name", 18, PlayerFigureType.Hunden, 10);
