@@ -19,17 +19,15 @@ public class Board {
         return boardSquares[index];
     }
 
-   public void takePlayerTurn(Player currentPlayer, int diceValue) throws NotEnoughBalanceException {
+   public void takePlayerTurn(Player currentPlayer, int diceValue, Dice dice) throws NotEnoughBalanceException {
         //Remove player from current field
+        int nextIndex = movePlayer(currentPlayer, diceValue);
 
-        int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
-        int currentIndex = nextIndex % squareCount;
-        currentPlayer.setCurrentSquareIndex(this.gui,currentIndex);
 
        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()-1];
        Square square = boardSquare.getSquare();
 
-       handleAnySquareBefore(currentPlayer);
+       handleAnySquareBefore(currentPlayer, dice);
         switch (square.getSquareType()) {
             case DoNothing:
                 handleNothingSquare(currentPlayer);
@@ -56,6 +54,12 @@ public class Board {
         handleAnySquareAfter(currentPlayer, nextIndex);
     }
 
+    public int movePlayer(Player currentPlayer, int diceValue) {
+        int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
+        int currentIndex = nextIndex % squareCount;
+        currentPlayer.setCurrentSquareIndex(this.gui,currentIndex);
+        return nextIndex;
+    }
     private void handleTaxSquare(Player currentPlayer) throws NotEnoughBalanceException {
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()-1];
         Square square = boardSquare.getSquare();
@@ -75,10 +79,31 @@ public class Board {
             currentPlayer.decreaseBalanceBy(100);
         }
     }
-    private void handleAnySquareBefore(Player currentPlayer) throws NotEnoughBalanceException {
+    private void handleAnySquareBefore(Player currentPlayer,Dice dice) throws NotEnoughBalanceException {
         if (currentPlayer.isInPrison()) {
-            currentPlayer.decreaseBalanceBy(1);
-            currentPlayer.setInPrison(false);
+            boolean choice = gui.getUserLeftButtonPressed(currentPlayer.getName() + "Er i fængsel. Slå en 6'er for at komme fri eller betal 200","Kast","Betal 200");
+            if (choice) {
+                int diceValue = dice.roll();
+                this.gui.setDie(diceValue);
+                if(diceValue == 6) {
+                    gui.showMessage("Du slog en 6'er og undslap fængslet!");
+                    movePlayer(currentPlayer,diceValue);
+                    currentPlayer.setInPrison(false);
+                }
+                else {
+                    gui.showMessage("Du slog ikke en 6'er!");
+                }
+            }
+            else {
+                currentPlayer.decreaseBalanceBy(200);
+                String button = this.gui.getUserButtonPressed("Du kom ud af fængslet. Kast terningen - tryk på Kast","Kast" );
+                if (button.equals("Kast")) {
+                    int diceValue = dice.roll();
+                    this.gui.setDie(diceValue);
+                    movePlayer(currentPlayer,diceValue);
+                }
+            }
+
         }
     }
 

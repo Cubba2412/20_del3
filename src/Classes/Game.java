@@ -43,15 +43,13 @@ public class Game {
                 this.gui.setDie(diceValue);
             }
            try {
-                board.takePlayerTurn(currentPlayer, diceValue);
-                BoardSquare boardSquare = board.getBoardSquareByIndex(currentPlayer.getCurrentSquareIndex());
+                board.takePlayerTurn(currentPlayer, diceValue, dice);
+                BoardSquare boardSquare = board.getBoardSquareByIndex(currentPlayer.getCurrentSquareIndex()-1);
                 Square square = boardSquare.getSquare();
-                System.out.println("Pris: " + square.getPrice());
-                System.out.println("Pengebeholdning: " + currentPlayer.getBalance());
-                System.out.println("Square: " + square.getName());
+                gui.showMessage("Square: " + square.getName() + "\n"+ "Pris: " + square.getPrice());
             } catch (NotEnoughBalanceException e) {
                 handleGameOver(currentPlayer);
-                return;
+                break;
             }
 
             playerIndex++;
@@ -72,10 +70,8 @@ public class Game {
             }
         }
 
-        System.out.println(" ### SPIL SLUT ###");
-        System.out.println("Vinder");
-        System.out.println("Navn: " + winingPlayer.getName());
-        System.out.println("Pengebeholding: " + winingPlayer.getBalance());
+        gui.showMessage(" ### SPIL SLUT ###" + "\n" + "Vinder" + "\n" + "Navn: " + winingPlayer.getName());
+
     }
 
     private int getYoungestPlayerIndex() {
