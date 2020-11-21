@@ -2,6 +2,7 @@ package Classes;
 
 import java.util.Scanner;
 
+import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
@@ -12,28 +13,34 @@ public class Game {
     private int maximumPlayerCount = 4;
     private Player[] players;
     private Dice dice = new Dice();
-    private Board board = new Board();
+    private GUI gui;
+    private Board board = new Board(gui);
     private Scanner scanner = new Scanner(System.in);
 
-    public Game() {
-        initializeGame();
+    public Game(GUI gui) {
+        this.gui = gui;
+        start();
     }
 
+    //public GUI_Player[] Game(GUI gui) {
+      //  initializeGame(gui);
+   // }
+
     public void start() {
-
-        int playerIndex = getYoungestPlayerIndex();
+        // Initialize the game
+        players = initializeGame(gui);
+        //Ensure the youngest player starts
+        int playerIndex  = getYoungestPlayerIndex();
         Player currentPlayer = players[playerIndex];
-        boolean running = true;
-        while (running) {
+        while (true) {
             String name = currentPlayer.getName();
-            System.out.println();
-            System.out.println("### " + name + " ###");
-            System.out.println("Kast terning - tryk på Enter");
-            String waitForEnter = scanner.nextLine();
-            int diceValue = dice.roll();
-            System.out.println("Terning: " + diceValue);
-
-            try {
+            String choice = gui.getUserButtonPressed("Spiller" + name + "'s tur. Kast terningen - tryk på Enter" );
+            int diceValue = -1;
+            if (choice.equals("Spiller" + name + "'s tur. Kast terningen - tryk på Enter")) {
+                diceValue = dice.roll();
+                gui.setDie(diceValue);
+            }
+           try {
                 board.takePlayerTurn(currentPlayer, diceValue);
                 BoardSquare boardSquare = board.getBoardSquareByIndex(currentPlayer.getCurrentSquareIndex());
                 Square square = boardSquare.getSquare();
@@ -82,8 +89,7 @@ public class Game {
         return index;
     }
 
-    private void initializeGame() {
-        GUI gui = new GUI();
+    private Player[] initializeGame(GUI gui) {
         gui.showMessage("                                                                        Velkommen til Matador!");
 
         playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
@@ -93,17 +99,16 @@ public class Game {
             playerCount = gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         }
 
-        //int initialPlayerBalance = getPlayerInitialBalance();
-        //PlayerFigureType[] figureTypes = getPlayerFigureTypes();
-        GUI_Player[] players = new GUI_Player[playerCount];
+        Player[] players = new Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            String name = gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
-            //int age = gui.getUserInteger("Indtast spiller " + i + "'s alder: ");
-            players[i] = new GUI_Player(name, 2000);
-            gui.addPlayer(players[i]);
-            gui.getFields()[0].setCar(players[i], true);
-            //players[i] = new Player(name, age, figureTypes[i], initialPlayerBalance);
+            String name = gui.getUserString("Indtast spiller " + i+1 + "'s navn: ");
+            int age = gui.getUserInteger("Indtast spiller " + i+1 + "'s alder: ");
+            GUI_Player gui_player = new GUI_Player(name, 2000);
+            players[i] = new Player(gui_player, age, 0);
+            gui.addPlayer(gui_player);
+            gui.getFields()[0].setCar(players[i].getGuiPlayer(), true);
         }
+        return players;
     }
 
     private int nextIntFromScanner(){

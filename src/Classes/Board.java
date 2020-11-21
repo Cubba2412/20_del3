@@ -1,11 +1,17 @@
 package Classes;
 
+import gui_fields.GUI_Field;
+import gui_fields.GUI_Player;
+import gui_main.GUI;
+
 public class Board {
 
     private int squareCount = 24;
+    private GUI gui;
     private BoardSquare[] boardSquares = new BoardSquare[squareCount];
 
-    public Board() {
+    public Board(GUI gui) {
+        this.gui = gui;
         initializeBoard();
     }
 
@@ -13,15 +19,16 @@ public class Board {
         return boardSquares[index];
     }
 
-    public void takePlayerTurn(Player currentPlayer, int diceValue) throws NotEnoughBalanceException {
+   public void takePlayerTurn(Player currentPlayer, int diceValue) throws NotEnoughBalanceException {
+        //Remove player from current field
 
         int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
         int currentIndex = nextIndex % squareCount;
-        currentPlayer.setCurrentSquareIndex(currentIndex);
+        currentPlayer.setCurrentSquareIndex(gui,currentIndex);
 
+        GUI_Field currentField = gui.getFields()[currentIndex];
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
         Square square = boardSquare.getSquare();
-
         handleAnySquareBefore(currentPlayer);
 
         switch (square.getSquareType()) {
@@ -95,7 +102,7 @@ public class Board {
     private void handleGotoJailSquare(Player currentPlayer) {
         currentPlayer.setInPrison(true);
         int takeABreakBoardSquareIndex = getSquareIndexByType(SquareType.TakeBreak);
-        currentPlayer.setCurrentSquareIndex(takeABreakBoardSquareIndex);
+        currentPlayer.setCurrentSquareIndex(this.gui,takeABreakBoardSquareIndex);
     }
 
     private void handleTakeABreakSquare(Player currentPlayer) {
@@ -119,6 +126,7 @@ public class Board {
         }
         return 0;
     }
+
 
     private void initializeBoard() {
 
@@ -170,5 +178,4 @@ public class Board {
         boardSquares[index++] = new BoardSquare(vandLandet);
         boardSquares[index++] = new BoardSquare(strandPromenaden);
     }
-
 }

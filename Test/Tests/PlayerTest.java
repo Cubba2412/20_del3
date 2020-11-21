@@ -2,6 +2,7 @@ package Tests;
 
 import Classes.Player;
 import Classes.PlayerFigureType;
+import gui_fields.GUI_Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +13,8 @@ public class PlayerTest {
     //Do this before all the testing
     @Before
     public void init() {
-        player = new Player("Test name", 18, PlayerFigureType.Hunden, 10);
+        GUI_Player gui_player = new GUI_Player("Test name", 2000);
+        player = new Player(gui_player, 18, 10);
     }
 
     //positiv test method

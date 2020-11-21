@@ -1,23 +1,24 @@
 package Classes;
 
+import gui_fields.GUI_Player;
+import gui_main.GUI;
+
 public class Player {
 
-    private String name;
+    private GUI_Player player;
     private int age;
-    private int balance;
     private int currentSquareIndex;
-    private PlayerFigureType figureType;
     private boolean isInPrison;
 
-    public Player(String name, int age, PlayerFigureType figureType, int balance) {
-        this.name = name;
+    public Player(GUI_Player player, int age, int currentSquareIndex) {
+        this.player = player;
         this.age = age;
-        this.balance = balance;
-        this.figureType = figureType;
+        this.currentSquareIndex = currentSquareIndex;
     }
+    public GUI_Player getGuiPlayer() {return this.player;}
 
     public String getName() {
-        return name;
+        return this.player.getName();
     }
 
     public int getAge() {
@@ -25,28 +26,32 @@ public class Player {
     }
 
     public int getBalance() {
-        return balance;
+        return this.player.getBalance();
     }
 
     public int getCurrentSquareIndex() {
         return currentSquareIndex;
     }
 
-    public void setCurrentSquareIndex(int currentPositionIndex) {
+    public void setCurrentSquareIndex(GUI gui, int currentPositionIndex) {
+        //Remove player from old field
+        gui.getFields()[this.currentSquareIndex].setCar(this.player, false);
         this.currentSquareIndex = currentPositionIndex;
+        gui.getFields()[this.currentSquareIndex].setCar(this.player, true);
     }
 
     public void increaseBalanceBy(int amount) {
-        this.balance += amount;
+        int currentBalance = this.player.getBalance();
+        this.player.setBalance(currentBalance + amount);
     }
 
     public void decreaseBalanceBy(int amount) throws NotEnoughBalanceException {
-        int remainingBalance = this.balance - amount;
+        int remainingBalance = this.player.getBalance() - amount;
         if (remainingBalance < 0) {
             throw new NotEnoughBalanceException();
         }
 
-        this.balance = remainingBalance;
+        this.player.setBalance(remainingBalance);
     }
 
     public boolean isInPrison() {
@@ -58,6 +63,6 @@ public class Player {
     }
 
     public boolean isBankrupt() {
-        return balance <= 0;
+        return this.player.getBalance() <= 0;
     }
 }
