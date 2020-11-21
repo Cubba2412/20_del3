@@ -7,7 +7,7 @@ public enum SquareType {
     Payment,
     GotoJail,
     Prison,
-    TakeBreak,
+    Beer,
+    Ship,
     TakeChanceCard,
-    FreeParking,
 }

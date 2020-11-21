@@ -17,7 +17,10 @@ public class Square {
     }
 
     public String getName() {
-        return this.field.getDescription();
+        return field.getDescription();
+    }
+    public String getSubText() {
+        return field.getSubText();
     }
 
     public int getPrice() {
@@ -30,5 +33,9 @@ public class Square {
 
     public SquareType getSquareType() {
         return squareType;
+    }
+
+    public GUI_Field getField() {
+        return field;
     }
 }
