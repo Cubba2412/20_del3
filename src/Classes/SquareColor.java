@@ -3,13 +3,16 @@ package Classes;
 public enum SquareColor {
 
     None,
-    Brown,
-    LightBlue,
+    White,
+    Gray,
+    Blue,
     Pink,
+    LightGray,
+    Beer,
+    DarkGray,
+    Ship,
+    Purple,
     Yellow,
     Red,
-    Orange,
     Green,
-    DarkBlue,
-
 }

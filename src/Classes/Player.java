@@ -14,6 +14,7 @@ public class Player {
         this.player = player;
         this.age = age;
         this.currentSquareIndex = currentSquareIndex;
+        this.isInPrison = false;
     }
     public GUI_Player getGuiPlayer() {return this.player;}
 
