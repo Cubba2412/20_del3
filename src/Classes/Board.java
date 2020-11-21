@@ -1,15 +1,15 @@
 package Classes;
 
-import gui_fields.GUI_Field;
-import gui_fields.GUI_Player;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
 
 public class Board {
 
     private int squareCount = 40;
+    private int chanceCount = 24;
     private GUI gui;
     private BoardSquare[] boardSquares;
+    private ChanceCard[] chanceCards;
 
     public Board(GUI gui) {
         this.gui = gui;
@@ -245,6 +245,7 @@ public class Board {
         gui.showMessage("Du er landet på prøv lykken! Tag et chance kort");
         gui.displayChanceCard("Træk et chance kort");
 
+
     }
 
     private int getSquareIndexByType(SquareType squareType) {
@@ -259,15 +260,22 @@ public class Board {
 
 
     private BoardSquare[] initializeBoard() {
+        // Initialize chance cards
+        this.chanceCards = initializeCards();
+        // Squares
         BoardSquare[] boardSquares = new BoardSquare[squareCount];
         Square start = new Square(this.gui.getFields()[0], 0, SquareColor.None, SquareType.Start);
         Square Roedovrevej = new Square(this.gui.getFields()[1], 60, SquareColor.Blue, SquareType.Payment);
+
         Square chance1 = new Square(this.gui.getFields()[2], 0, SquareColor.LightGray, SquareType.TakeChanceCard);
+
         Square Hvidovrevej = new Square(this.gui.getFields()[3], 60, SquareColor.Blue, SquareType.Payment);
         Square IndkomstSkat = new Square(this.gui.getFields()[4], 200, SquareColor.Gray, SquareType.Tax);
         Square Oeresund = new Square(this.gui.getFields()[5], 200, SquareColor.Ship, SquareType.Ship);
         Square Roskildevej = new Square(this.gui.getFields()[6], 100, SquareColor.Pink, SquareType.Payment);
+
         Square chance2 = new Square(this.gui.getFields()[7], 0, SquareColor.LightGray, SquareType.TakeChanceCard);
+
         Square Valby_Langgade = new Square(this.gui.getFields()[8], 100, SquareColor.Pink, SquareType.Payment);
         Square Allegade = new Square(this.gui.getFields()[9], 120, SquareColor.Pink, SquareType.Payment);
         Square Faengsel = new Square(this.gui.getFields()[10], 0, SquareColor.None, SquareType.Prison);
@@ -343,5 +351,43 @@ public class Board {
         boardSquares[index++] = new BoardSquare(Skat);
         boardSquares[index++] = new BoardSquare(Raadhuspladsen);
         return boardSquares;
+    }
+
+    private ChanceCard[] initializeCards() {
+        ChanceCard[] chanceCards = new ChanceCard[chanceCount];
+        ChanceCard chance1 = new ChanceCard("Ryk frem til START. Modtag 200","Start",200,0);
+        ChanceCard chance2 = new ChanceCard("Ryk 5 felter frem","Move",0,5);
+        ChanceCard chance3 = new ChanceCard("Ryk 1 felt frem eller tag et chancekort mere","Move",0,1);
+        ChanceCard chance4 = new ChanceCard("Du har spist for meget slik. Betal 200 til banken","Pay",200,0);
+        ChanceCard chance5 = new ChanceCard("Du løslades uden omkostninger. Behold dette kort indtil du får brugt det","Prison",0,0);
+        ChanceCard chance6 = new ChanceCard("Det er din fødselsdag! Alle giver dig 100. TILLYKKE MED FØDSELSDAGEN!","PayByOthers",100,0);
+        ChanceCard chance7 = new ChanceCard("Du har lavet alle dine lektier! Modtag 200 fra banken.","PayByBank",200,0);
+       /* ChanceCard chance8 = new ChanceCard()
+        ChanceCard chance9 = new ChanceCard()
+        ChanceCard chance10 = new ChanceCard()
+        ChanceCard chance11 = new ChanceCard()
+        ChanceCard chance12 = new ChanceCard()
+        ChanceCard chance13 = new ChanceCard()
+        ChanceCard chance14 = new ChanceCard()
+        ChanceCard chance15 = new ChanceCard()
+        ChanceCard chance16 = new ChanceCard()
+        ChanceCard chance17 = new ChanceCard()
+        ChanceCard chance18 = new ChanceCard()
+        ChanceCard chance19 = new ChanceCard()
+        ChanceCard chance20 = new ChanceCard()
+        ChanceCard chance21 = new ChanceCard()
+        ChanceCard chance22 = new ChanceCard()
+        ChanceCard chance23 = new ChanceCard()
+        ChanceCard chance24 = new ChanceCard()*/
+
+        int index = 0;
+        chanceCards[index] = chance1;
+        chanceCards[index++] = chance2;
+        chanceCards[index++] = chance3;
+        chanceCards[index++] = chance4;
+        chanceCards[index++] = chance5;
+        chanceCards[index++] = chance6;
+        chanceCards[index++] = chance7;
+        return chanceCards;
     }
 }
