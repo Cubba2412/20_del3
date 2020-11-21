@@ -24,7 +24,7 @@ public class Board {
 
         int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
         int currentIndex = nextIndex % squareCount;
-        currentPlayer.setCurrentSquareIndex(gui,currentIndex);
+        currentPlayer.setCurrentSquareIndex(this.gui,currentIndex);
 
         GUI_Field currentField = gui.getFields()[currentIndex];
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];

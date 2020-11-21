@@ -14,11 +14,12 @@ public class Game {
     private Player[] players;
     private Dice dice = new Dice();
     private GUI gui;
-    private Board board = new Board(gui);
+    private Board board;
     private Scanner scanner = new Scanner(System.in);
 
     public Game(GUI gui) {
         this.gui = gui;
+        this.board = new Board(gui);
         start();
     }
 
@@ -28,17 +29,18 @@ public class Game {
 
     public void start() {
         // Initialize the game
-        players = initializeGame(gui);
+        players = initializeGame();
         //Ensure the youngest player starts
         int playerIndex  = getYoungestPlayerIndex();
-        Player currentPlayer = players[playerIndex];
         while (true) {
+            Player currentPlayer = players[playerIndex];
             String name = currentPlayer.getName();
-            String choice = gui.getUserButtonPressed("Spiller" + name + "'s tur. Kast terningen - tryk på Enter" );
+            String choice = this.gui.getUserButtonPressed("Spiller " + name + "'s tur. Kast terningen - tryk på Kast","Kast" );
+           // Initialize dice value
             int diceValue = -1;
-            if (choice.equals("Spiller" + name + "'s tur. Kast terningen - tryk på Enter")) {
+            if (choice.equals("Kast")) {
                 diceValue = dice.roll();
-                gui.setDie(diceValue);
+                this.gui.setDie(diceValue);
             }
            try {
                 board.takePlayerTurn(currentPlayer, diceValue);
@@ -89,24 +91,24 @@ public class Game {
         return index;
     }
 
-    private Player[] initializeGame(GUI gui) {
-        gui.showMessage("                                                                        Velkommen til Matador!");
+    private Player[] initializeGame() {
+        this.gui.showMessage("                                                                        Velkommen til Matador!");
 
-        playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+        playerCount = this.gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         //playerCount = nextIntFromScanner();
         while(playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
-            gui.showMessage("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
-            playerCount = gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+            this.gui.showMessage("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
+            playerCount = this.gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         }
 
         Player[] players = new Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            String name = gui.getUserString("Indtast spiller " + i+1 + "'s navn: ");
-            int age = gui.getUserInteger("Indtast spiller " + i+1 + "'s alder: ");
+            String name = this.gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
+            int age = this.gui.getUserInteger("Indtast spiller " + String.valueOf(i+1) + "'s alder: ");
             GUI_Player gui_player = new GUI_Player(name, 2000);
             players[i] = new Player(gui_player, age, 0);
-            gui.addPlayer(gui_player);
-            gui.getFields()[0].setCar(players[i].getGuiPlayer(), true);
+            this.gui.addPlayer(gui_player);
+            this.gui.getFields()[0].setCar(players[i].getGuiPlayer(), true);
         }
         return players;
     }
