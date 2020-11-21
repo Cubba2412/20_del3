@@ -56,4 +56,8 @@ public class Player {
     public void setInPrison(boolean inPrison) {
         isInPrison = inPrison;
     }
+
+    public boolean isBankrupt() {
+        return balance <= 0;
+    }
 }
