@@ -34,19 +34,8 @@ public class Game {
         int playerIndex  = getYoungestPlayerIndex();
         while (true) {
             Player currentPlayer = players[playerIndex];
-            String name = currentPlayer.getName();
-            String choice = this.gui.getUserButtonPressed("Spiller " + name + "'s tur. Kast terningen - tryk på Kast","Kast" );
-           // Initialize dice value
-            int diceValue = -1;
-            if (choice.equals("Kast")) {
-                diceValue = dice.roll();
-                this.gui.setDie(diceValue);
-            }
            try {
-                board.takePlayerTurn(currentPlayer, diceValue, dice);
-                BoardSquare boardSquare = board.getBoardSquareByIndex(currentPlayer.getCurrentSquareIndex()-1);
-                Square square = boardSquare.getSquare();
-                gui.showMessage("Square: " + square.getName() + "\n"+ "Pris: " + square.getPrice());
+                board.takePlayerTurn(currentPlayer, dice);
             } catch (NotEnoughBalanceException e) {
                 handleGameOver(currentPlayer);
                 break;
