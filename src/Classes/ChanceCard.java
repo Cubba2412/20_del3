@@ -7,7 +7,7 @@ public class ChanceCard {
     private String actionType;
     private int value;
     private int move;
-    private int chanceCount = 7;
+    private int chanceCount = 6;
 
     public ChanceCard(String text, String actionType, int value, int move) {
         this.text = text;

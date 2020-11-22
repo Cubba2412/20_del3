@@ -19,6 +19,7 @@ public class Game {
 
     public Game(GUI gui) {
         this.gui = gui;
+        players = initializeGame();
         this.board = new Board(gui,players);
         start();
     }
@@ -29,7 +30,6 @@ public class Game {
 
     public void start() {
         // Initialize the game
-        players = initializeGame();
         //Ensure the youngest player starts
         int playerIndex  = getYoungestPlayerIndex();
         while (true) {
@@ -79,17 +79,20 @@ public class Game {
     private Player[] initializeGame() {
         this.gui.showMessage("                                                                        Velkommen til Matador!");
 
-        playerCount = this.gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+        playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         //playerCount = nextIntFromScanner();
         while(playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
             this.gui.showMessage("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
-            playerCount = this.gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+            playerCount = gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         }
 
         Player[] players = new Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            String name = this.gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
-            int age = this.gui.getUserInteger("Indtast spiller " + String.valueOf(i+1) + "'s alder: ");
+            String name = gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
+            int age = gui.getUserInteger("Indtast spiller " + String.valueOf(i+1) + "'s alder: ");
+            while(age == -1) {
+                age = gui.getUserInteger("Indtast venligst spiller " + String.valueOf(i+1) + "'s alder: ");
+            }
             GUI_Player gui_player = new GUI_Player(name, 2000);
             players[i] = new Player(gui_player, age, 0);
             this.gui.addPlayer(gui_player);

@@ -6,7 +6,7 @@ import gui_main.GUI;
 public class Board {
 
     private int squareCount = 40;
-    private int chanceCount = 24;
+    private int chanceCount = 7;
     private GUI gui;
     private BoardSquare[] boardSquares;
     private ChanceCard[] chanceCards;
@@ -36,38 +36,48 @@ public class Board {
            //Remove player from current field
            int nextIndex = movePlayer(currentPlayer, diceValue);
            BoardSquare boardSquare;
-           if (currentPlayer.getCurrentSquareIndex() == 0) {
+           if (currentPlayer.getCurrentSquareIndex() == 0 || nextIndex > 40) {
                boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
            }
            else {
                boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex() - 1];
            }
-
            Square square = boardSquare.getSquare();
            printBoardSquare(square);
-           switch (square.getSquareType()) {
-               case DoNothing:
-                   handleNothingSquare(currentPlayer);
-                   break;
-               case Start:
-                   handleStartSquare(currentPlayer);
-                   break;
-               case Tax:
-                   handleTaxSquare(currentPlayer);
-                   break;
-               case Payment:
-                   handlePaymentSquare(currentPlayer);
-                   break;
-               case GotoJail:
-                   handleGotoJailSquare(currentPlayer);
-                   break;
-               case TakeChanceCard:
-                   handleTakeChanceCardSquare(currentPlayer);
-                   break;
-           }
+           evaluateSquare(square,currentPlayer);
+
 
            handleAnySquareAfter(currentPlayer, nextIndex);
        }
+    }
+
+    private void evaluateSquare(Square square, Player currentPlayer) throws NotEnoughBalanceException {
+        switch (square.getSquareType()) {
+            case DoNothing:
+                handleNothingSquare(currentPlayer);
+                break;
+            case Start:
+                handleStartSquare(currentPlayer);
+                break;
+            case Tax:
+                handleTaxSquare(currentPlayer);
+                break;
+            case Payment:
+                handlePaymentSquare(currentPlayer);
+                break;
+            case GotoJail:
+                handleGotoJailSquare(currentPlayer);
+                break;
+            case TakeChanceCard:
+                handleTakeChanceCardSquare(currentPlayer);
+                break;
+            case Ship:
+                handlePaymentSquare(currentPlayer);
+                break;
+            case Beer:
+                handlePaymentSquare(currentPlayer);
+                break;
+        }
     }
 
     private void handleStartSquare(Player currentPlayer) {
@@ -114,7 +124,10 @@ public class Board {
         else if (square.getSubText().equals("Betal 100")) {
             return;
         }
-        this.gui.showMessage("Square: " + square.getName() + "\n"+ "Pris: " + square.getPrice());
+        else if (square.getSquareType() == SquareType.TakeChanceCard) {
+            return;
+        }
+        this.gui.showMessage("Square: " + square.getName() + "\n"+ "Pris: " + square.getFieldPrice());
     }
     private void handleTaxSquare(Player currentPlayer) throws NotEnoughBalanceException {
         BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()-1];
@@ -137,28 +150,36 @@ public class Board {
     }
     private boolean handleAnySquareBefore(Player currentPlayer,Dice dice) throws NotEnoughBalanceException {
         if (currentPlayer.isInPrison()) {
-            boolean choice = gui.getUserLeftButtonPressed(currentPlayer.getName() + "Er i fængsel. Slå en 6'er for at komme fri eller betal 200", "Kast", "Betal 200");
-            if (choice) {
-                int diceValue = dice.roll();
-                this.gui.setDie(diceValue);
-                if (diceValue == 6) {
-                    gui.showMessage("Du slog en 6'er og undslap fængslet!");
-                    movePlayer(currentPlayer, diceValue);
+            if (currentPlayer.hasJailFreeCard()) {
+                boolean choice1 = gui.getUserLeftButtonPressed("Du har et kom ud af fængslet kort. Vil du bruge det?", "Ja", "Nej");
+                if (choice1) {
                     currentPlayer.setInPrison(false);
                     return false;
                 } else {
-                    gui.showMessage("Du slog ikke en 6'er!");
-                    return true;
-                }
-            } else {
-                currentPlayer.decreaseBalanceBy(200);
-                String button = this.gui.getUserButtonPressed("Du kom ud af fængslet. Kast terningen - tryk på Kast", "Kast");
-                if (button.equals("Kast")) {
-                    int diceValue = dice.roll();
-                    this.gui.setDie(diceValue);
-                    currentPlayer.setInPrison(false);
-                    movePlayer(currentPlayer, diceValue);
-                    return true;
+                    boolean choice = gui.getUserLeftButtonPressed(currentPlayer.getName() + " Er i fængsel. Slå en 6'er for at komme fri eller betal 200", "Kast", "Betal 200");
+                    if (choice) {
+                        int diceValue = dice.roll();
+                        this.gui.setDie(diceValue);
+                        if (diceValue == 6) {
+                            gui.showMessage("Du slog en 6'er og undslap fængslet!");
+                            movePlayer(currentPlayer, diceValue);
+                            currentPlayer.setInPrison(false);
+                            return false;
+                        } else {
+                            gui.showMessage("Du slog ikke en 6'er!");
+                            return true;
+                        }
+                    } else {
+                        currentPlayer.decreaseBalanceBy(200);
+                        String button = this.gui.getUserButtonPressed("Du kom ud af fængslet. Kast terningen - tryk på Kast", "Kast");
+                        if (button.equals("Kast")) {
+                            int diceValue = dice.roll();
+                            this.gui.setDie(diceValue);
+                            currentPlayer.setInPrison(false);
+                            movePlayer(currentPlayer, diceValue);
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -166,7 +187,7 @@ public class Board {
     }
 
     private void handleAnySquareAfter(Player currentPlayer, int nextIndex) {
-        if (nextIndex >= squareCount && !currentPlayer.isInPrison()) {
+        if (nextIndex >= squareCount) {
             currentPlayer.increaseBalanceBy(200);
             gui.showMessage("Du har passeret start og modtager 200kr!");
         }
@@ -178,9 +199,15 @@ public class Board {
 
     private void handlePaymentSquare(Player currentPlayer) throws NotEnoughBalanceException {
 
-        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()-1];
+        BoardSquare boardSquare;
+        if(currentPlayer.getCurrentSquareIndex() == 0) {
+            boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+        }
+        else {
+            boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex() - 1];
+        }
         Square square = boardSquare.getSquare();
-        int price = square.getPrice();
+        int fieldPrice = square.getFieldPrice();
         Player soldToPlayer = boardSquare.getSoldToPlayer();
 
         // if the soldToPlayer is the same as the currentPlayer then do not do anything because
@@ -188,11 +215,14 @@ public class Board {
         if (soldToPlayer == currentPlayer){
             switch ((square.getSquareType())) {
                 case Payment:
-                    boolean choice = gui.getUserLeftButtonPressed("Vil du bygge et hus eller hotel her?","Ja","Nej");
-                    if (choice)
+                    String choice = gui.getUserButtonPressed("Vil du bygge et hus (Pris: 100 per hus) eller hotel (Pris:400 og 4 huse) her?","Hus","Hotel","Nej");
+                    if (choice.equals("Hus"))
                     {
                         int priceOfHouse = buildHouse(square);
                         currentPlayer.decreaseBalanceBy(priceOfHouse);
+                    }
+                    else if (choice.equals("Hotel")) {
+                        buildHotel(square);
                     }
                     else {
                         //Do nothing
@@ -207,14 +237,15 @@ public class Board {
 
         else if (soldToPlayer == null) {
             boolean choice  = gui.getUserLeftButtonPressed(
-                    "Vil du købe dette felt? " + "    " + "Square: " + square.getName() + "    "+ "Pris: " + square.getPrice(), "Ja","Nej");
+                    "Vil du købe dette felt? " + "    " + "Square: " + square.getName() + "    "+ "Pris: " + fieldPrice , "Ja","Nej");
             // the first player on this square becomes the owner and pays the price
             if (choice) {
-                currentPlayer.decreaseBalanceBy(price);
+                currentPlayer.decreaseBalanceBy(fieldPrice);
                 boardSquare.setSoldToPlayer(currentPlayer);
             }
 
         } else {
+            int price = square.getPrice();
             // other players coming to this square pays to the owner and become one of the renters
             gui.showMessage("Du er landet på et felt for en anden spiller og skal betale dem " + String.valueOf(price));
             soldToPlayer.increaseBalanceBy(price);
@@ -224,15 +255,42 @@ public class Board {
     }
 
     private int buildHouse(Square square) {
+        int oldHouses = square.getNumHouses();
         int houses = gui.getUserInteger("Hvor mange huse vil du bygge? (Pris per hus = 100)");
-        while(houses < 1 || houses > 4) {
-            this.gui.showMessage("Du kan kun bygge mellem 1-4 huse");
-            houses = this.gui.getUserInteger("Hvor mange vil du bygge? (Pris per hus = 100)");
+        while(houses < 1 || houses > 4-oldHouses) {
+            gui.showMessage("Du kan kun bygge mellem 1-4 huse. Du har indtil videre " + String.valueOf(oldHouses) + " huse her");
+            houses = gui.getUserInteger("Hvor mange vil du bygge? (Pris per hus = 100)");
         }
         GUI_Street street = (GUI_Street) square.getField();
         street.setHouses(houses);
+        square.setNumHouses(houses);
         int price = houses*100;
         return price;
+    }
+
+    private void buildHotel(Square square) {
+        if (square.getNumHouses() == 4) {
+            boolean hasHotel = square.hasHotel();
+            if (hasHotel) {
+                gui.showMessage("Du har allerede et hotel på denne grund. Du kan kun have ét");
+            } else {
+                GUI_Street street = (GUI_Street) square.getField();
+                street.setHotel(true);
+                square.setHotel();
+            }
+        }
+        else{
+            boolean choice = gui.getUserLeftButtonPressed("Du har ikke nok huse til at bygge et hotel her. Vil du købe nogle?","Ja","Nej");
+            if(choice) {
+                buildHouse(square);
+                buildHotel(square);
+            }
+            else {
+                return;
+            }
+        }
+
+
     }
     private void handleGotoJailSquare(Player currentPlayer) {
         currentPlayer.setInPrison(true);
@@ -257,12 +315,18 @@ public class Board {
             case "Move":
                 int currentIndex = currentPlayer.getCurrentSquareIndex();
                 if (text.equals("Ryk 5 felter frem")) {
-                        currentPlayer.setCurrentSquareIndex(gui,currentIndex+5);
+                        movePlayer(currentPlayer,5);
+                        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+                        Square square = boardSquare.getSquare();
+                        evaluateSquare(square,currentPlayer);
                 }
                 else {
                     boolean choice = gui.getUserLeftButtonPressed("Vil du rykke et felt frem eller tage et nyt chancekort?", "Ryk 1 Felt Frem", "Tag nyt chancekort");
                     if (choice) {
-                        currentPlayer.setCurrentSquareIndex(gui,currentIndex+1);
+                        movePlayer(currentPlayer,1);
+                        BoardSquare boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
+                        Square square = boardSquare.getSquare();
+                        evaluateSquare(square,currentPlayer);
                     }
                     else {
                         handleTakeChanceCardSquare(currentPlayer);
@@ -408,23 +472,6 @@ public class Board {
         ChanceCard chance5 = new ChanceCard("Du løslades uden omkostninger. Behold dette kort indtil du får brugt det","Prison",0,0);
         ChanceCard chance6 = new ChanceCard("Det er din fødselsdag! Alle giver dig 100. TILLYKKE MED FØDSELSDAGEN!","PayByOthers",100,0);
         ChanceCard chance7 = new ChanceCard("Du har lavet alle dine lektier! Modtag 200 fra banken.","PayByBank",200,0);
-       /* ChanceCard chance8 = new ChanceCard()
-        ChanceCard chance9 = new ChanceCard()
-        ChanceCard chance10 = new ChanceCard()
-        ChanceCard chance11 = new ChanceCard()
-        ChanceCard chance12 = new ChanceCard()
-        ChanceCard chance13 = new ChanceCard()
-        ChanceCard chance14 = new ChanceCard()
-        ChanceCard chance15 = new ChanceCard()
-        ChanceCard chance16 = new ChanceCard()
-        ChanceCard chance17 = new ChanceCard()
-        ChanceCard chance18 = new ChanceCard()
-        ChanceCard chance19 = new ChanceCard()
-        ChanceCard chance20 = new ChanceCard()
-        ChanceCard chance21 = new ChanceCard()
-        ChanceCard chance22 = new ChanceCard()
-        ChanceCard chance23 = new ChanceCard()
-        ChanceCard chance24 = new ChanceCard()*/
 
         int index = 0;
         chanceCards[index] = chance1;
