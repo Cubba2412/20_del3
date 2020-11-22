@@ -9,12 +9,14 @@ public class Player {
     private int age;
     private int currentSquareIndex;
     private boolean isInPrison;
+    private boolean getOutOfJailCard;
 
     public Player(GUI_Player player, int age, int currentSquareIndex) {
         this.player = player;
         this.age = age;
         this.currentSquareIndex = currentSquareIndex;
         this.isInPrison = false;
+        this.getOutOfJailCard = false;
     }
     public GUI_Player getGuiPlayer() {return this.player;}
 
@@ -53,6 +55,12 @@ public class Player {
         }
 
         this.player.setBalance(remainingBalance);
+    }
+
+    public boolean hasJailFreeCard() {return getOutOfJailCard;}
+
+    public void setGetOutOfJailCard() {
+        getOutOfJailCard = !getOutOfJailCard;
     }
 
     public boolean isInPrison() {

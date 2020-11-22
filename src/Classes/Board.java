@@ -10,9 +10,11 @@ public class Board {
     private GUI gui;
     private BoardSquare[] boardSquares;
     private ChanceCard[] chanceCards;
+    private Player[] players;
 
-    public Board(GUI gui) {
+    public Board(GUI gui,Player[] players) {
         this.gui = gui;
+        this.players = players;
         this.boardSquares = initializeBoard();
     }
 
@@ -241,11 +243,55 @@ public class Board {
 
 
 
-    private void handleTakeChanceCardSquare(Player currentPlayer) {
+    private void handleTakeChanceCardSquare(Player currentPlayer) throws NotEnoughBalanceException {
         gui.showMessage("Du er landet på prøv lykken! Tag et chance kort");
-        gui.displayChanceCard("Træk et chance kort");
-
-
+        ChanceCard chanceCard = chanceCards[1].getRandomChanceCard(chanceCards);
+        String text = chanceCard.getText();
+        gui.displayChanceCard(text);
+        String action = chanceCard.getActionType();
+        switch (action) {
+            case "Start":
+                currentPlayer.increaseBalanceBy(200);
+                currentPlayer.setCurrentSquareIndex(gui,0);
+                break;
+            case "Move":
+                int currentIndex = currentPlayer.getCurrentSquareIndex();
+                if (text.equals("Ryk 5 felter frem")) {
+                        currentPlayer.setCurrentSquareIndex(gui,currentIndex+5);
+                }
+                else {
+                    boolean choice = gui.getUserLeftButtonPressed("Vil du rykke et felt frem eller tage et nyt chancekort?", "Ryk 1 Felt Frem", "Tag nyt chancekort");
+                    if (choice) {
+                        currentPlayer.setCurrentSquareIndex(gui,currentIndex+1);
+                    }
+                    else {
+                        handleTakeChanceCardSquare(currentPlayer);
+                    }
+                }
+                break;
+            case "Pay":
+                currentPlayer.decreaseBalanceBy(200);
+                break;
+            case "Prison":
+                if (currentPlayer.hasJailFreeCard()) {
+                    return;
+                }
+                else {
+                    currentPlayer.setGetOutOfJailCard();
+                }
+            break;
+            case "PayByOthers":
+                for(int i=0;i<players.length;i++) {
+                    if (!players[i].getName().equals(currentPlayer.getName())) {
+                        players[i].decreaseBalanceBy(100);
+                    }
+                    currentPlayer.increaseBalanceBy(100);
+                }
+                break;
+            case "PayByBank":
+                currentPlayer.increaseBalanceBy(200);
+                break;
+        }
     }
 
     private int getSquareIndexByType(SquareType squareType) {

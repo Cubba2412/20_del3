@@ -19,7 +19,7 @@ public class Game {
 
     public Game(GUI gui) {
         this.gui = gui;
-        this.board = new Board(gui);
+        this.board = new Board(gui,players);
         start();
     }
 
