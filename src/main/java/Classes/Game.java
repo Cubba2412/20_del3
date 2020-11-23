@@ -15,8 +15,7 @@ public class Game {
     private Dice dice = new Dice();
     private GUI gui;
     private GameBoard gameBoard;
-    private Scanner scanner = new Scanner(System.in);
-
+    
     public Game() {
         this.gameBoard = new GameBoard(players);
         GUI gui = new GUI(gameBoard.getFields());
@@ -25,10 +24,6 @@ public class Game {
         players = initializeGame();
         gameBoard.setPlayers(players);
     }
-
-    //public GUI_Player[] Game(GUI gui) {
-      //  initializeGame(gui);
-   // }
 
     public void start() {
         // Initialize the game
@@ -81,13 +76,13 @@ public class Game {
     private Player[] initializeGame() {
         this.gui.showMessage("                                                                        Velkommen til Matador!");
 
-        playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
+        this.playerCount = gui.getUserInteger("Indtas antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         //playerCount = nextIntFromScanner();
         while(playerCount < minimumPlayerCount || playerCount > maximumPlayerCount) {
             this.gui.showMessage("Antal spillere skal være mellem " + minimumPlayerCount + " og " + maximumPlayerCount);
             playerCount = gui.getUserInteger("Indtast antal spiller: " + minimumPlayerCount + " - " + maximumPlayerCount);
         }
-
+        int initialBalance = getPlayerInitialBalance();
         Player[] players = new Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
             String name = gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
@@ -95,18 +90,13 @@ public class Game {
             while(age == -1) {
                 age = gui.getUserInteger("Indtast venligst spiller " + String.valueOf(i+1) + "'s alder: ");
             }
-            GUI_Player gui_player = new GUI_Player(name, 2000);
+
+            GUI_Player gui_player = new GUI_Player(name, initialBalance);
             players[i] = new Player(gui_player, age, 0);
             this.gui.addPlayer(gui_player);
             this.gui.getFields()[0].setCar(players[i].getGuiPlayer(), true);
         }
         return players;
-    }
-
-    private int nextIntFromScanner(){
-        int value = scanner.nextInt();
-        String readLineButItsNotUsed = scanner.nextLine();
-        return value;
     }
 
     private PlayerFigureType[] getPlayerFigureTypes() {
