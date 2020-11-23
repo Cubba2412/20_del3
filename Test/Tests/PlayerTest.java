@@ -43,8 +43,9 @@ public class PlayerTest {
 
     @Test
     public void testBankrupt() {
+        GUI_Player gui_player = new GUI_Player("Test name", 0);
+        player = new Player(gui_player, 18, 10);
         boolean expectedResult = true;
-        player.increaseBalanceBy(-20);
         assertEquals(expectedResult, player.isBankrupt());
     }
 }

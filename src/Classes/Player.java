@@ -72,6 +72,6 @@ public class Player {
     }
 
     public boolean isBankrupt() {
-        return this.player.getBalance() <= 0;
+        return (this.player.getBalance() <= 0);
     }
 }
