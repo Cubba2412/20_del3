@@ -1,12 +1,13 @@
 package Tests;
 
 import Classes.Player;
-import Classes.PlayerFigureType;
 import gui_fields.GUI_Player;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class PlayerTest {
     private Player player;

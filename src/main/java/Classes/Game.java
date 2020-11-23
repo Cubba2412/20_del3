@@ -2,7 +2,6 @@ package Classes;
 
 import java.util.Scanner;
 
-import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
@@ -14,13 +13,13 @@ public class Game {
     private Player[] players;
     private Dice dice = new Dice();
     private GUI gui;
-    private Board board;
+    private GameBoard gameBoard;
     private Scanner scanner = new Scanner(System.in);
 
     public Game(GUI gui) {
         this.gui = gui;
         players = initializeGame();
-        this.board = new Board(gui,players);
+        this.gameBoard = new GameBoard(gui,players);
         start();
     }
 
@@ -35,7 +34,7 @@ public class Game {
         while (true) {
             Player currentPlayer = players[playerIndex];
            try {
-                board.takePlayerTurn(currentPlayer, dice);
+                gameBoard.takePlayerTurn(currentPlayer, dice);
             } catch (NotEnoughBalanceException e) {
                 handleGameOver(currentPlayer);
                 break;

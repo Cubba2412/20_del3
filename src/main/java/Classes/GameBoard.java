@@ -3,7 +3,7 @@ package Classes;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
 
-public class Board {
+public class GameBoard {
 
     private int squareCount = 40;
     private int chanceCount = 7;
@@ -12,7 +12,7 @@ public class Board {
     private ChanceCard[] chanceCards;
     private Player[] players;
 
-    public Board(GUI gui,Player[] players) {
+    public GameBoard(GUI gui, Player[] players) {
         this.gui = gui;
         this.players = players;
         this.boardSquares = initializeBoard();
