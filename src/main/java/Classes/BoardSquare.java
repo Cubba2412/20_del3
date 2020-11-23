@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BoardSquare {
 
     private Square square;
-    private Player soldToPlayer;
+
     private ArrayList<Player> rentedToPlayers = new ArrayList<Player>();
 
     public BoardSquare(Square square){
@@ -16,13 +16,6 @@ public class BoardSquare {
         return square;
     }
 
-    public Player getSoldToPlayer() {
-        return soldToPlayer;
-    }
-
-    public void setSoldToPlayer(Player soldToPlayer) {
-        this.soldToPlayer = soldToPlayer;
-    }
 
     public ArrayList<Player> getRentedToPlayers() {
         return rentedToPlayers;

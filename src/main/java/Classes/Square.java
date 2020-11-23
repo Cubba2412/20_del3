@@ -1,73 +1,65 @@
 package Classes;
 
-import gui_fields.GUI_Field;
+import java.awt.*;
 
 public class Square {
 
-    private GUI_Field field;
-    private int price;
-    private SquareColor color;
-    private SquareType squareType;
-    private int numHouses;
-    private boolean hasHotel;
+    private final String title;
+    private final String description;
+    private final String subText;
+    private final int price;
+    private final Color BG_color;
+    private final Color FG_color;
+    private final SquareType squareType;
+    private Player soldToPlayer;
 
-    public Square(GUI_Field field, int price, SquareColor color, SquareType squareType) {
-        this.field = field;
+    public Square(String title, String subText, String description, int price, Color BG_color, Color FG_color, SquareType squareType) {
+        this.title = title;
+        this.description= description;
+        this.subText = subText;
         this.price = price;
-        this.color = color;
+        this.BG_color = BG_color;
+        this.FG_color = FG_color;
         this.squareType = squareType;
-        this.numHouses = 0;
-        this.hasHotel = false;
     }
 
-    public String getName() {
-        return field.getDescription();
+    public String getTitle() {
+        return title;
     }
+
+    public Player getSoldToPlayer() {
+        return soldToPlayer;
+    }
+
+    public void setSoldToPlayer(Player soldToPlayer) {
+        this.soldToPlayer = soldToPlayer;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public String getSubText() {
-        return field.getSubText();
+        return subText;
     }
 
-    public boolean hasHotel() {
-        return hasHotel;
+    public Color getBGColor() {
+        return BG_color;
     }
 
-    public int getNumHouses() {
-        return numHouses;
+    public Color getFGColor() {
+        return FG_color;
     }
 
-    public void setNumHouses(int numHouses) {
-        this.numHouses = numHouses;
-    }
-
-    public void setHotel() {
-        hasHotel = !hasHotel;
-    }
-
-    public int getPrice() {
-        if(numHouses == 0) {
-            return price/4;
-        }
-        else if (hasHotel) {
-            return price*2;
-        }
-        else {
-            return (price/4*numHouses);
-        }
+    public String getStringPrice() {
+        return String.valueOf(price);
     }
 
     public int getFieldPrice() {
         return price;
     }
 
-    public SquareColor getColor() {
-        return color;
-    }
-
     public SquareType getSquareType() {
         return squareType;
-    }
-
-    public GUI_Field getField() {
-        return field;
     }
 }
