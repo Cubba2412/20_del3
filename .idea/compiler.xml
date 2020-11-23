@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="20_del3" />
+        <module name="Maven" />
         <module name="untitled" />
       </profile>
     </annotationProcessing>
