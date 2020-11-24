@@ -43,12 +43,7 @@ public class GameBoard {
            //Remove player from current field
            int nextIndex = movePlayer(currentPlayer, diceValue);
            Square boardSquare;
-           if (currentPlayer.getCurrentSquareIndex() == 0 || nextIndex > squareCount) {
-               boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
-           }
-           else {
-               boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex() - 1];
-           }
+           boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
            printBoardSquare(boardSquare);
            evaluateSquare(boardSquare,currentPlayer);
 
@@ -120,6 +115,23 @@ public class GameBoard {
         this.gui.showMessage("Felt: " + square.getTitle());
     }
 
+    public void allSquaresToString() {
+        for (int i = 0;i<squareCount;i++) {
+            squareToString(boardSquares[i]);
+        }
+    }
+
+    public void squareToString(Square square) {
+        System.out.println("Title: "+ square.getTitle());
+        System.out.println("SubText: "+ square.getSubText());
+        System.out.println("Description: "+ square.getDescription());
+        System.out.println("Price (value): "+ square.getStringPrice());
+        System.out.println("Foreground Color: "+ square.getFGColor());
+        System.out.println("Backgorund Color: "+ square.getBGColor());
+        System.out.println("Square Type: "+ square.getSquareType());
+        System.out.println();
+    }
+
     private boolean handleAnySquareBefore(Player currentPlayer,Dice dice) throws NotEnoughBalanceException {
         if (currentPlayer.isInPrison()) {
             if (currentPlayer.hasJailFreeCard()) {
@@ -172,12 +184,7 @@ public class GameBoard {
     private void handlePaymentSquare(Player currentPlayer) throws NotEnoughBalanceException {
 
         Square boardSquare;
-        if(currentPlayer.getCurrentSquareIndex() == 0) {
-            boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
-        }
-        else {
-            boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex() - 1];
-        }
+        boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
         int fieldPrice = boardSquare.getFieldPrice();
         Player soldToPlayer = boardSquare.getSoldToPlayer();
 
@@ -211,7 +218,7 @@ public class GameBoard {
         currentPlayer.setInPrison(true);
         gui.showMessage("Du skal i Fængsel!");
         int prisonIndex = getSquareIndexByType(SquareType.Prison);
-        currentPlayer.setCurrentSquareIndex(gui,prisonIndex+1);
+        currentPlayer.setCurrentSquareIndex(gui,prisonIndex);
     }
 
 
@@ -287,32 +294,32 @@ public class GameBoard {
         this.chanceCards = initializeCards();
         // Squares
         Square start = new Square("Start", "","Modtag 2M når du passerer",2, Color.red, Color.black, SquareType.Start);
-        Square Burgerbaren = new Square("Burgerbaren\nPris: 1", "", "Burgerbaren\nPris: 1",1, Color.cyan, Color.BLACK, SquareType.Payment);
-        Square Pizzariaet = new Square("Pizzariaet\nPris: 1", "", "Pizzariaet\nPris: 1",1, Color.cyan, Color.BLACK, SquareType.Payment);
+        Square Burgerbaren = new Square("Burgerbaren", "Pris: 1", "Burgerbaren",1, Color.cyan, Color.BLACK, SquareType.Payment);
+        Square Pizzariaet = new Square("Pizzariaet", "Pris: 1", "Pizzariaet",1, Color.cyan, Color.BLACK, SquareType.Payment);
         Square chance1 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
-        Square Slikbutikken = new Square("Slikbutikken\nPris: 1", "", "Slikbutikken\nPris: 1",1, Color.magenta, Color.BLACK, SquareType.Payment);
-        Square Iskiosken = new Square("Iskiosken\nPris: 1", "", "Iskiosken\nPris: 1",1, Color.magenta, Color.BLACK, SquareType.Payment);
-        Square Faengsel = new Square("Fængsel\nBare på besøg", "Bare på besøg", "Fængsel\nBare på besøg",0, Color.white, Color.BLACK, SquareType.Prison);
-        Square Museet = new Square("Museet\nPris: 2", "", "Museet\nPris: 2",2, Color.pink, Color.BLACK, SquareType.Payment);
-        Square Biblioteket = new Square("Biblioteket\nPris: 2", "", "Biblioteket\nPris: 2",2, Color.pink, Color.BLACK, SquareType.Payment);
+        Square Slikbutikken = new Square("Slikbutikken", "Pris: 1", "Slikbutikken",1, Color.magenta, Color.BLACK, SquareType.Payment);
+        Square Iskiosken = new Square("Iskiosken", "Pris: 1", "Iskiosken",1, Color.magenta, Color.BLACK, SquareType.Payment);
+        Square Faengsel = new Square("Fængsel", "Bare på besøg", "Fængsel",0, Color.white, Color.BLACK, SquareType.Prison);
+        Square Museet = new Square("Museet", "Pris: 2", "Museet",2, Color.pink, Color.BLACK, SquareType.Payment);
+        Square Biblioteket = new Square("Biblioteket", "Pris: 2", "Biblioteket",2, Color.pink, Color.BLACK, SquareType.Payment);
         Square chance2 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
-        Square Skateparken = new Square("Skateparken\nPris: 2", "", "Skateparken\nPris: 2",2, Color.orange, Color.BLACK, SquareType.Payment);
-        Square Svoemmingpolen = new Square("Svømmingpoolen\nPris: 2", "", "Svømmingpoolen\nPris: 2",2, Color.orange, Color.BLACK, SquareType.Payment);
+        Square Skateparken = new Square("Skateparken", "Pris: 2", "Skateparken",2, Color.orange, Color.BLACK, SquareType.Payment);
+        Square Svoemmingpolen = new Square("Svømmingpoolen", "Pris: 2", "Svømmingpoolen",2, Color.orange, Color.BLACK, SquareType.Payment);
         Square Gratisparkering = new Square("Gratis Parkering", "", "Gratis Parkering",0, Color.white, Color.BLACK, SquareType.DoNothing);
-        Square Spillehallen = new Square("Spillehallen\nPris: 3", "", "Spillehallen\nPris: 3",3, Color.red, Color.BLACK, SquareType.Payment);
-        Square Biografen = new Square("Biografen\nPris: 3", "", "Biografen\nPris: 3",3, Color.red, Color.BLACK, SquareType.Payment);
+        Square Spillehallen = new Square("Spillehallen", "Pris: 3", "Spillehallen",3, Color.red, Color.BLACK, SquareType.Payment);
+        Square Biografen = new Square("Biografen", "Pris: 3", "Biografen",3, Color.red, Color.BLACK, SquareType.Payment);
         Square chance3 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
-        Square Legetoejsbutikken = new Square("Legetøjsbutikken\nPris: 3", "", "Legetøjsbutikken\nPris: 3",3, Color.yellow, Color.BLACK, SquareType.Payment);
-        Square Dyrehandlen = new Square("Dyrehandlen\nPris: 3", "", "Dyrehandlen\nPris: 3",3, Color.yellow, Color.BLACK, SquareType.Payment);
+        Square Legetoejsbutikken = new Square("Legetøjsbutikken", "Pris: 3", "Legetøjsbutikken",3, Color.yellow, Color.BLACK, SquareType.Payment);
+        Square Dyrehandlen = new Square("Dyrehandlen", "Pris: 3", "Dyrehandlen",3, Color.yellow, Color.BLACK, SquareType.Payment);
         Square GaaIFaengsel = new Square("Gå I Fængsel", "Du skal i Fængsel!", "Gå I Fængsel",0, Color.white, Color.BLACK, SquareType.GotoJail);
-        Square Bowlinghallen = new Square("Bowlinghallen\nPris: 4", "", "Bowlinghallen\nPris: 4",4, Color.green, Color.BLACK, SquareType.Payment);
-        Square Zoo = new Square("Zoo\nPris: 4", "", "Zoo\nPris: 4",4, Color.green, Color.BLACK, SquareType.Payment);
+        Square Bowlinghallen = new Square("Bowlinghallen", "Pris: 4", "Bowlinghallen",4, Color.green, Color.BLACK, SquareType.Payment);
+        Square Zoo = new Square("Zoo", "Pris: 4", "Zoo",4, Color.green, Color.BLACK, SquareType.Payment);
         Square chance4 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
-        Square Vandlandet = new Square("Vandlandet\nPris: 5", "", "Vandlandet\nPris: 5",5, Color.blue, Color.BLACK, SquareType.Payment);
-        Square Strandpromenaden = new Square("Strandpromenaden\nPris: 5", "", "Strandpromenaden\nPris: 5",5, Color.blue, Color.BLACK, SquareType.Payment);
+        Square Vandlandet = new Square("Vandlandet", "Pris: 5", "Vandlandet",5, Color.blue, Color.BLACK, SquareType.Payment);
+        Square Strandpromenaden = new Square("Strandpromenaden", "Pris: 5", "Strandpromenaden",5, Color.blue, Color.BLACK, SquareType.Payment);
         Square[] boardSquares = new Square[squareCount];
         int index = 0;
-        boardSquares[index] = start;
+        boardSquares[index++] = start;
         boardSquares[index++] = Burgerbaren;
         boardSquares[index++] = Pizzariaet;
         boardSquares[index++] = chance1;

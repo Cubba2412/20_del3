@@ -1,8 +1,4 @@
 package Classes;
-
-import java.util.Scanner;
-
-import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
@@ -99,19 +95,6 @@ public class Game {
         return players;
     }
 
-    private PlayerFigureType[] getPlayerFigureTypes() {
-        PlayerFigureType[] availableFigureTypes = new PlayerFigureType[4];
-        availableFigureTypes[0] = PlayerFigureType.Bilen;
-        availableFigureTypes[1] = PlayerFigureType.Katten;
-        availableFigureTypes[2] = PlayerFigureType.Hunden;
-        availableFigureTypes[3] = PlayerFigureType.Skibet;
-
-        PlayerFigureType[] figureTypes = new PlayerFigureType[playerCount];
-        for (int i = 0; i < playerCount; i++) {
-            figureTypes[i] = availableFigureTypes[i];
-        }
-        return figureTypes;
-    }
 
     private int getPlayerInitialBalance() {
         if (playerCount == 2) {
