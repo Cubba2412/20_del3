@@ -82,6 +82,32 @@ public class Game {
         Player[] players = new Player[playerCount];
         for (int i = 0; i < playerCount; i++) {
             String name = gui.getUserString("Indtast spiller " + String.valueOf(i+1) + "'s navn: ");
+            //Ensure name is not already taken by another player
+            //2 players
+            while (name.equals("")) {
+                name = gui.getUserString("Indtast Venligst spiller " + String.valueOf(i + 1) + "'s navn: ");
+            }
+            if (i==1) {
+                while(players[i-1].getName().equals(name)) {
+                    gui.showMessage("Dette navn er allerede taget!");
+                    name = gui.getUserString("Indtast spiller " + String.valueOf(i + 1) + "'s navn: ");
+                }
+            }
+            //3 players
+            else if (i==2) {
+                while (players[i - 1].getName().equals(name) || players[i - 2].getName().equals(name)) {
+                    gui.showMessage("Dette navn er allerede taget!");
+                    name = gui.getUserString("Indtast spiller " + String.valueOf(i + 1) + "'s navn: ");
+                }
+            }
+            else if (i==3) {
+                    while (players[i-1].getName().equals(name) || players[i-2].getName().equals(name) || players[i-3].getName().equals(name)) {
+                        gui.showMessage("Dette navn er allerede taget!");
+                        name = gui.getUserString("Indtast spiller " + String.valueOf(i + 1) + "'s navn: ");
+                    }
+
+            }
+
             int age = gui.getUserInteger("Indtast spiller " + String.valueOf(i+1) + "'s alder: ");
             while(age == -1) {
                 age = gui.getUserInteger("Indtast venligst spiller " + String.valueOf(i+1) + "'s alder: ");

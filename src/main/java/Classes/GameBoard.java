@@ -40,6 +40,7 @@ public class GameBoard {
                diceValue = dice.roll();
                this.gui.setDie(diceValue);
            }
+           int currentIndex = currentPlayer.getCurrentSquareIndex();
            //Remove player from current field
            int nextIndex = movePlayer(currentPlayer, diceValue);
            Square boardSquare;
@@ -47,7 +48,7 @@ public class GameBoard {
            printBoardSquare(boardSquare);
            evaluateSquare(boardSquare,currentPlayer);
 
-           handleAnySquareAfter(currentPlayer, nextIndex);
+
        }
     }
 
@@ -78,6 +79,7 @@ public class GameBoard {
 
     private int movePlayer(Player currentPlayer, int diceValue) {
 
+
         //Calculate next index
         int nextIndex = currentPlayer.getCurrentSquareIndex() + diceValue;
         //Set players current index to this
@@ -92,6 +94,8 @@ public class GameBoard {
         else {
             currentPlayer.setCurrentSquareIndex(this.gui, currentIndex);
         }
+        //Check if they passed start
+        checkStartPass(currentPlayer, nextIndex);
         return currentIndex;
     }
 
@@ -170,7 +174,7 @@ public class GameBoard {
         return false;
     }
 
-    private void handleAnySquareAfter(Player currentPlayer, int nextIndex) {
+    private void checkStartPass(Player currentPlayer, int nextIndex) {
         if (nextIndex >= squareCount) {
             currentPlayer.increaseBalanceBy(2);
             gui.showMessage("Du har passeret start og modtager 2M!");
