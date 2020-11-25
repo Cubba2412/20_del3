@@ -47,8 +47,6 @@ public class GameBoard {
            boardSquare = boardSquares[currentPlayer.getCurrentSquareIndex()];
            printBoardSquare(boardSquare);
            evaluateSquare(boardSquare,currentPlayer);
-
-
        }
     }
 
@@ -205,6 +203,8 @@ public class GameBoard {
             if (choice) {
                 currentPlayer.decreaseBalanceBy(fieldPrice);
                 boardSquare.setSoldToPlayer(currentPlayer);
+                GUI_Ownable ownable = (GUI_Ownable) gui_fields[currentPlayer.getCurrentSquareIndex()];
+                ownable.setBorder(currentPlayer.getCarColor());
             }
 
         } else {

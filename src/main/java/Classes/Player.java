@@ -3,6 +3,8 @@ package Classes;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
+import java.awt.*;
+
 public class Player {
 
     private GUI_Player player;
@@ -22,6 +24,10 @@ public class Player {
 
     public String getName() {
         return this.player.getName();
+    }
+
+    public Color getCarColor() {
+        return player.getPrimaryColor();
     }
 
     public int getAge() {

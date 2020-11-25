@@ -112,7 +112,6 @@ public class Game {
             while(age == -1) {
                 age = gui.getUserInteger("Indtast venligst spiller " + String.valueOf(i+1) + "'s alder: ");
             }
-
             GUI_Player gui_player = new GUI_Player(name, initialBalance);
             players[i] = new Player(gui_player, age, 0);
             this.gui.addPlayer(gui_player);
