@@ -40,7 +40,6 @@ public class GameBoard {
                diceValue = dice.roll();
                this.gui.setDie(diceValue);
            }
-           int currentIndex = currentPlayer.getCurrentSquareIndex();
            //Remove player from current field
            int nextIndex = movePlayer(currentPlayer, diceValue);
            Square boardSquare;
@@ -142,36 +141,43 @@ public class GameBoard {
                     currentPlayer.setInPrison(false);
                     return false;
                 } else {
-                    boolean choice = gui.getUserLeftButtonPressed(currentPlayer.getName() + " Er i fængsel. Slå en 6'er for at komme fri eller betal 2M", "Kast", "Betal 2M");
-                    if (choice) {
-                        int diceValue = dice.roll();
-                        this.gui.setDie(diceValue);
-                        if (diceValue == 6) {
-                            gui.showMessage("Du slog en 6'er og undslap fængslet!");
-                            movePlayer(currentPlayer, diceValue);
-                            currentPlayer.setInPrison(false);
-                            return false;
-                        } else {
-                            gui.showMessage("Du slog ikke en 6'er!");
-                            return true;
-                        }
-                    } else {
-                        currentPlayer.decreaseBalanceBy(2);
-                        String button = this.gui.getUserButtonPressed("Du kom ud af fængslet. Kast terningen - tryk på Kast", "Kast");
-                        if (button.equals("Kast")) {
-                            int diceValue = dice.roll();
-                            this.gui.setDie(diceValue);
-                            currentPlayer.setInPrison(false);
-                            movePlayer(currentPlayer, diceValue);
-                            return true;
-                        }
-                    }
+                    return inPrisonPrompt(currentPlayer,dice);
                 }
+            }
+            else {
+                return inPrisonPrompt(currentPlayer,dice);
             }
         }
         return false;
     }
 
+    public boolean inPrisonPrompt(Player currentPlayer, Dice dice) throws NotEnoughBalanceException {
+        boolean choice = gui.getUserLeftButtonPressed(currentPlayer.getName() + " Er i fængsel. Slå en 6'er for at komme fri eller betal 2M", "Kast", "Betal 2M");
+        if (choice) {
+            int diceValue = dice.roll();
+            this.gui.setDie(diceValue);
+            if (diceValue == 6) {
+                gui.showMessage("Du slog en 6'er og undslap fængslet!");
+                movePlayer(currentPlayer, diceValue);
+                currentPlayer.setInPrison(false);
+                return false;
+            } else {
+                gui.showMessage("Du slog ikke en 6'er!");
+                return true;
+            }
+        } else {
+            currentPlayer.decreaseBalanceBy(2);
+            String button = this.gui.getUserButtonPressed("Du kom ud af fængslet. Kast terningen - tryk på Kast", "Kast");
+            if (button.equals("Kast")) {
+                int diceValue = dice.roll();
+                this.gui.setDie(diceValue);
+                currentPlayer.setInPrison(false);
+                movePlayer(currentPlayer, diceValue);
+                return true;
+            }
+        }
+        return false;
+    }
     private void checkStartPass(Player currentPlayer, int nextIndex) {
         if (nextIndex >= squareCount) {
             currentPlayer.increaseBalanceBy(2);
@@ -180,7 +186,7 @@ public class GameBoard {
     }
 
     private void handleNothingSquare(Player currentPlayer) {
-
+        gui.showMessage("Du er landet på Gratis parkering!");
     }
 
     private void handlePaymentSquare(Player currentPlayer) throws NotEnoughBalanceException {
@@ -309,7 +315,7 @@ public class GameBoard {
         Square chance2 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
         Square Skateparken = new Square("Skateparken", "Pris: 2", "Skateparken",2, Color.orange, Color.BLACK, SquareType.Payment);
         Square Svoemmingpolen = new Square("Svømmingpoolen", "Pris: 2", "Svømmingpoolen",2, Color.orange, Color.BLACK, SquareType.Payment);
-        Square Gratisparkering = new Square("Gratis Parkering", "", "Gratis Parkering",0, Color.white, Color.BLACK, SquareType.DoNothing);
+        Square Gratisparkering = new Square("Gratis Parkering", "Gratis Parkering", "Gratis Parkering",0, Color.white, Color.BLACK, SquareType.DoNothing);
         Square Spillehallen = new Square("Spillehallen", "Pris: 3", "Spillehallen",3, Color.red, Color.BLACK, SquareType.Payment);
         Square Biografen = new Square("Biografen", "Pris: 3", "Biografen",3, Color.red, Color.BLACK, SquareType.Payment);
         Square chance3 = new Square("Chance", "Ta' Chancen!", "Ta' Chancen!",0, Color.white, Color.BLACK, SquareType.TakeChanceCard);
