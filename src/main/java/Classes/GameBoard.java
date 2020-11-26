@@ -391,7 +391,7 @@ public class GameBoard {
             case Start:
                 return new GUI_Start(square.getTitle(), square.getSubText(), square.getDescription(),square.getBGColor(),square.getFGColor());
             case DoNothing:
-                return new GUI_Refuge();
+                return new GUI_Refuge("default",square.getTitle(),square.getSubText(),square.getDescription(),square.getBGColor(),square.getFGColor());
             case Payment:
                 return new GUI_Street(square.getTitle(), square.getSubText(), square.getDescription(),square.getStringPrice(),square.getBGColor(),square.getFGColor());
             case GotoJail:
