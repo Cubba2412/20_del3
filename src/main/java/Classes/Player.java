@@ -7,27 +7,27 @@ import java.awt.*;
 
 public class Player {
 
-    private GUI_Player player;
+    private GUI_Player guiplayer;
     private int age;
     private int currentSquareIndex;
     private boolean isInPrison;
     private boolean getOutOfJailCard;
 
-    public Player(GUI_Player player, int age, int currentSquareIndex) {
-        this.player = player;
+    public Player(GUI_Player guiplayer, int age, int currentSquareIndex) {
+        this.guiplayer = guiplayer;
         this.age = age;
         this.currentSquareIndex = currentSquareIndex;
         this.isInPrison = false;
         this.getOutOfJailCard = false;
     }
-    public GUI_Player getGuiPlayer() {return this.player;}
+    public GUI_Player getGuiPlayer() {return this.guiplayer;}
 
     public String getName() {
-        return this.player.getName();
+        return this.guiplayer.getName();
     }
 
     public Color getCarColor() {
-        return player.getPrimaryColor();
+        return guiplayer.getPrimaryColor();
     }
 
     public int getAge() {
@@ -35,7 +35,7 @@ public class Player {
     }
 
     public int getBalance() {
-        return this.player.getBalance();
+        return this.guiplayer.getBalance();
     }
 
     public int getCurrentSquareIndex() {
@@ -44,23 +44,23 @@ public class Player {
 
     public void setCurrentSquareIndex(GUI gui, int currentPositionIndex) {
         //Remove player from old field
-        gui.getFields()[this.currentSquareIndex].setCar(this.player, false);
+        gui.getFields()[this.currentSquareIndex].setCar(this.guiplayer, false);
         this.currentSquareIndex = currentPositionIndex;
-        gui.getFields()[this.currentSquareIndex].setCar(this.player, true);
+        gui.getFields()[this.currentSquareIndex].setCar(this.guiplayer, true);
     }
 
     public void increaseBalanceBy(int amount) {
-        int currentBalance = this.player.getBalance();
-        this.player.setBalance(currentBalance + amount);
+        int currentBalance = this.guiplayer.getBalance();
+        this.guiplayer.setBalance(currentBalance + amount);
     }
 
     public void decreaseBalanceBy(int amount) throws NotEnoughBalanceException {
-        int remainingBalance = this.player.getBalance() - amount;
+        int remainingBalance = this.guiplayer.getBalance() - amount;
         if (remainingBalance < 0) {
             throw new NotEnoughBalanceException();
         }
 
-        this.player.setBalance(remainingBalance);
+        this.guiplayer.setBalance(remainingBalance);
     }
 
     public boolean hasJailFreeCard() {return getOutOfJailCard;}
@@ -78,6 +78,6 @@ public class Player {
     }
 
     public boolean isBankrupt() {
-        return (this.player.getBalance() <= 0);
+        return (this.guiplayer.getBalance() <= 0);
     }
 }
